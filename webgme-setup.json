@@ -8,6 +8,10 @@
       "canyonviewGenerator": {
         "src": "src/plugins/canyonviewGenerator",
         "test": "test/plugins/canyonviewGenerator"
+      },
+      "ROSTurtleSimGenerator": {
+        "src": "src/plugins/ROSTurtleSimGenerator",
+        "test": "test/plugins/ROSTurtleSimGenerator"
       }
     },
     "decorators": {
