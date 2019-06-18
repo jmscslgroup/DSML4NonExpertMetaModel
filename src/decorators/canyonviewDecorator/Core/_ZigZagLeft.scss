@@ -1,0 +1,58 @@
+zigzagleft-turn@import "Colors";
+@import "Connector";
+
+$zigzagleft-turn-min-width: 120px;
+$zigzagleft-turn-max-width: 120px;
+$zigzagleft-turn-height: 60px;
+$zigzagleft-turn-border: 1px solid #000000;
+$zigzagleft-turn-name-padding: 5px;
+$zigzagleft-turn-background-color: #FCA500;
+$zigzagleft-turn-name-height: 16px;
+$zigzagleft-turn-border-radius: 13px;
+
+@mixin ZigZagLeft {
+  .zigzagleft-turn {
+    min-width: $zigzagleft-turn-min-width;
+    max-width: $zigzagleft-turn-max-width;
+    height: $zigzagleft-turn-height;
+    background-color: $zigzagleft-turn-background-color;
+    border: $zigzagleft-turn-border;
+    border-radius: $zigzagleft-turn-border-radius;
+
+    .name {
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-bottom: 1px solid #000000;
+      height: 16px;
+      line-height: 16px;
+      padding-left: $zigzagleft-turn-name-padding;
+      padding-right: $zigzagleft-turn-name-padding;
+    }
+  }
+
+  .connector {
+    @include connector_basics;
+
+    margin-left: $connector-size / -2;
+    left: 50%;
+
+    &.top {
+      top: $connector-size / -2;
+    }
+
+    &.bottom {
+      bottom: $connector-size / -2;
+    }
+  }
+}
+
+@mixin SelectedZigZagLeft {
+  .zigzagleft-turn {
+    background-color: #DBA555;//$selected-background-color;
+    border-color: $selected-border-color;
+  }
+}

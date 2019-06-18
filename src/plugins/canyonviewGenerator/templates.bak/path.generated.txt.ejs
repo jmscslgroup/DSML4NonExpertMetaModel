@@ -1,0 +1,28 @@
+<%
+motion = {};
+haveMotion = false;
+for (i = 0; i < pathModel.motion.length; i += 1) {
+	if(pathModel.motion[i].isStart) {
+		motion = pathModel.motion[i];
+		haveMotion = true;
+		break;
+	}
+}
+
+while(haveMotion) {
+//console.log('Have a motion: ' + JSON.stringify(motion, null, 4));
+//console.log(' - PrimitiveMotionConnections: ' + JSON.stringify(motion.PrimitiveMotionConnections, null, 4));
+%><%=motion.Type%> <%=motion.RadOfCurvature%> <%=motion.velocity%> <%=motion.Distance%> <%=motion.FinalTurnAngle%>
+<%
+haveMotion = false;
+if( motion.PrimitiveMotionConnections.length != 0) {
+//	console.log('There exists an outgoing connection');
+	for (i = 0; i < pathModel.motion.length; i += 1) {
+		if(pathModel.motion[i].id === motion.PrimitiveMotionConnections[0].targetId) {
+			haveMotion = true;
+			motion = pathModel.motion[i];
+			break;
+		}
+	}
+}
+}%>

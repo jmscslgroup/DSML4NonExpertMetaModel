@@ -1,4 +1,23 @@
 {
-  "components": {},
-  "dependencies": {}
+  "components": {
+    "plugins": {
+      "ExportToROSTurtleSim": {
+        "src": "src/plugins/ExportToROSTurtleSim",
+        "test": "test/plugins/ExportToROSTurtleSim"
+      },
+      "canyonviewGenerator": {
+        "src": "src/plugins/canyonviewGenerator",
+        "test": "test/plugins/canyonviewGenerator"
+      }
+    },
+    "decorators": {
+      "canyonviewDecorator": {
+        "src": "src/decorators/canyonviewDecorator"
+      }
+    }
+  },
+  "dependencies": {
+    "plugins": {},
+    "decorators": {}
+  }
 }

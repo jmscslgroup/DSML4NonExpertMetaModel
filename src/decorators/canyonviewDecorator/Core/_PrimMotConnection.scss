@@ -1,0 +1,43 @@
+@import "Colors";
+
+$primmotconnection-width: 120px;
+$primmotconnection-height: 55px;
+$primmotconnection-border: 1px solid rgba(0,0,0,0);
+$primmotconnection-name-padding: 5px;
+$primmotconnection-background-color: rgba(0,0,0,0);
+$primmotconnection-name-height: 16px;
+$primmotconnection-svg-width: $primmotconnection-width;
+$primmotconnection-svg-height: 40px;
+
+@mixin Primmotconnection {
+  .primmotconnection {
+    width: $primmotconnection-width;
+    height: $primmotconnection-height;
+    background-color: $primmotconnection-background-color;
+    border: $primmotconnection-border;
+
+    .svgContainer {
+      width: $primmotconnection-svg-width;
+      height: $primmotconnection-svg-height;
+    }
+
+    .name {
+      white-space: nowrap;
+      font-size: 12px;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 16px;
+      line-height: 16px;
+      padding-left: $primmotconnection-name-padding;
+      padding-right: $primmotconnection-name-padding;
+    }
+  }
+}
+
+@mixin SelectedPrimmotconnection {
+  .primmotconnection {
+    background-color: $selected-background-color;
+    border-color: $selected-border-color;
+  }
+}
