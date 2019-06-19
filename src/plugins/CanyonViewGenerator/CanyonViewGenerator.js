@@ -54,8 +54,7 @@ define([
      */
     CanyonViewGenerator.prototype.main = function (callback) {
         // Call the promise that loads all of the nodes within the
-        // model view
-
+        // model view. All business logic is done within the .then{}
         this.loadNodeMap(this.activeNode)
             .then( (nodes) => {
                 // Ensure there is at least 1 node
@@ -67,12 +66,70 @@ define([
 
                 // Collect all of the block nodes into a list
                 let blocks = this.getAllBlockNodes(nodes);
+                console.log(blocks);
 
+                // Get all of the connections between blocks
+                this.getBlockConnections(blocks, nodes);
 
+                return this.blobClient.putFile(this.core.getAttribute(this.activeNode, "name") + ".dmsl4kidz", JSON.stringify(blocks));
+
+            })
+            .then((metadataHash) => {
+                // Here the file has been added to the blob
+
+                this.result.addArtifact(metadataHash)
                 this.result.setSuccess(true);
                 callback(null, self.result);
-        });
+            })
+            .catch((err) => {
+                // Result success is false at invocation.
+                this.logger.error(err.stack);
+                callback(err, self.result);
+            });
 
+    };
+
+    CanyonViewGenerator.prototype.getBlockConnections = function(blocks, nodes) {
+      // Iterate through each node in the list
+      for ( let node in nodes ) {
+          // Collect the current node
+          let currentNode = nodes[node];
+
+          // Ensure that it is of type connection
+          if (!this.isMetaTypeOf(currentNode, this.META.Connection)) {
+              continue;
+          }
+
+          // Get the dest and src of the pointer node. These will point to the
+          // "pins" on the actual block node
+          let srcPath = this.core.getPointerPath(currentNode, "src");
+          let dstPath = this.core.getPointerPath(currentNode, "dst");
+
+          // Get the actual src and dst nodes
+          let srcNode = nodes[srcPath];
+          let dstNode = nodes[dstPath];
+
+          // The type of the connection the connection is to each node is dependent
+          // on the name of the "port" that the connection is connected to. For example,
+          // on a 'for' block the connection named 'code to run' means the code block to run
+          // x number of times. Where x is an attribute of the for block
+          let srcConnectionType = this.core.getAttribute(srcNode, "name");
+          let dstConnectionType = this.core.getAttribute(dstNode, "name");
+
+          // Get the actual node parents of the port nodes. These are the actual nodes
+          // that do the logic of the program (left, right, honk, etc.)
+          let srcParent = this.core.getParent(srcNode);
+          let dstParent = this.core.getParent(dstNode);
+
+          // The paths are what is used to index the nodes connections in the
+          // blocks dict
+          let srcParentPath = this.core.getPath(srcParent);
+          let dstParentPath = this.core.getPath(dstParent);
+
+          // Set the connections
+          blocks[srcParentPath].connections[srcConnectionType] = dstParentPath;
+          blocks[dstParentPath].connections[dstConnectionType] = srcParentPath;
+      }
     };
 
     /**
@@ -81,8 +138,8 @@ define([
      * @returns {Array} Array of JSON objects representing the blocks
      */
     CanyonViewGenerator.prototype.getAllBlockNodes = function(nodes) {
-        // Define the array to hold all of the JSON objects
-        let blocks = [];
+        // Define the dictionary: key -> path; value -> JSON objects
+        let blocks = {};
 
         // Iterate through each node in the list
         for ( let node in nodes ) {
@@ -90,19 +147,117 @@ define([
             let currentNode = nodes[node];
 
             // Check which meta type the node is and then get the information from it
-            if ( this.isMetaTypeOf(currentNode, this.META.Abstract_Motion )) {
-                blocks.push(this.getAbstractMotionBlock(currentNode));
+            if ( this.isMetaTypeOf(currentNode, this.META.Abstract_Motion) ) {
+                blocks[node] = this.getAbstractMotionBlock(currentNode);
+            }
+
+            else if ( this.isMetaTypeOf(currentNode, this.META.Abstract_Sensor) ) {
+                blocks[node] = this.getAbstractSensorBlock(currentNode);
+            }
+
+            else if ( this.isMetaTypeOf(currentNode, this.META.Abstract_Action) ) {
+                blocks[node] = this.getAbstractActionBlock(currentNode);
+            }
+
+            else if ( this.isMetaTypeOf(currentNode, this.META.Abstract_Control) ) {
+                blocks[node] = this.getAbstractControlBlock(currentNode);
             }
         }
 
+        // Return the block list
         return blocks;
     };
 
+    /**
+     * Get information from a node that inherits from abstract control block and return
+     * the JSON object
+     * @param abstractControlBlock Block that inherits from abstract control
+     * @returns {{type: string, connections: {}}}
+     */
+    CanyonViewGenerator.prototype.getAbstractControlBlock = function(abstractControlBlock) {
+        let abstractControlBlockModel = {
+            type: "",
+            connections: {}
+        };
 
+        // This is a kludge and I don't like it but it seems like the only quick way to
+        // get the meta type of the current node
+        let nodeType = this.core.getAttribute(abstractControlBlock, "name");
+
+        // Stuff the model
+        abstractControlBlockModel.type = nodeType;
+        return abstractControlBlockModel;
+    };
+
+    /**
+     * Get information from a node that inherits from abstract action block and return
+     * the JSON object
+     * @param abstractActionBlock Block that inherits from abstract action
+     * @returns {{type: string, connections: {}}}
+     */
+    CanyonViewGenerator.prototype.getAbstractActionBlock = function(abstractActionBlock) {
+        // Define a JSON object to store the action model
+        let abstractSensorBlockModel = {
+            type: "",
+            connections: {}
+        };
+
+        // This is a kludge and I don't like it but it seems like the only quick way to
+        // get the meta type of the current node
+        let nodeType = this.core.getAttribute(abstractActionBlock, "name");
+
+        // Stuff the model
+        abstractSensorBlockModel.type = nodeType;
+        return abstractSensorBlockModel;
+    };
+
+    /**
+     * Get information from a node that inherits from abstract sensor block and return
+     * the JSON object
+     * @param abstractSensorBlock Block that inherits from abstract sensor
+     * @returns {{type: string, connections: {}}}
+     */
+    CanyonViewGenerator.prototype.getAbstractSensorBlock = function(abstractSensorBlock) {
+        // Define a JSON object to store the sensor model
+        let abstractSensorBlockModel = {
+            type: "",
+            connections: {}
+        };
+
+        // This is a kludge and I don't like it but it seems like the only quick way to
+        // get the meta type of the current node
+        let nodeType = this.core.getAttribute(abstractSensorBlock, "name");
+
+        // Stuff the model
+        abstractSensorBlockModel.type = nodeType;
+        return abstractSensorBlockModel;
+    };
+
+    /**
+     * Get information from a node that inherits from abstract motion block and return
+     * the JSON object
+     * @param abstractMotionBlock Block that inherits from abstract motion
+     * @returns {{attributes: {}, type: string, connections: {}}}
+     */
     CanyonViewGenerator.prototype.getAbstractMotionBlock = function(abstractMotionBlock) {
+        // Define a JSON object to store the motion model
+        let abstractMotionBlockModel = {
+            type: "",
+            connections: {},
+            attributes: {}
+        };
+
         // This is a kluge and I don't like it but it seems like the only quick way to
         // get the meta type of the current node
         let nodeType = this.core.getAttribute(abstractMotionBlock, "name");
+
+        // Get the velocity
+        let velocity = this.core.getAttribute(abstractMotionBlock, "Velocity");
+
+        // Stuff the model
+        abstractMotionBlockModel.type = nodeType;
+        abstractMotionBlockModel.attributes["velocity"] = velocity;
+        return abstractMotionBlockModel;
     };
 
     return CanyonViewGenerator;
