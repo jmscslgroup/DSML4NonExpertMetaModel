@@ -9,19 +9,25 @@
         "src": "src/plugins/canyonviewGenerator",
         "test": "test/plugins/canyonviewGenerator"
       },
-      "ROSTurtleSimGenerator": {
-        "src": "src/plugins/ROSTurtleSimGenerator",
-        "test": "test/plugins/ROSTurtleSimGenerator"
+      "CanyonViewGenerator": {
+        "src": "src/plugins/CanyonViewGenerator",
+        "test": "test/plugins/CanyonViewGenerator"
       }
     },
     "decorators": {
       "canyonviewDecorator": {
         "src": "src/decorators/canyonviewDecorator"
       }
+    },
+    "addons": {
+      "CATVehicleContinuousVerifier": {
+        "src": "src/addons/CATVehicleContinuousVerifier"
+      }
     }
   },
   "dependencies": {
     "plugins": {},
-    "decorators": {}
+    "decorators": {},
+    "addons": {}
   }
 }
