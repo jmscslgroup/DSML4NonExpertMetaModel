@@ -17,6 +17,9 @@
     "decorators": {
       "canyonviewDecorator": {
         "src": "src/decorators/canyonviewDecorator"
+      },
+      "CanyonViewDecorator": {
+        "src": "src/decorators/CanyonViewDecorator"
       }
     },
     "addons": {
