@@ -65,7 +65,7 @@ while( !done && limit <= 500) {
 
             if ( popBlockType == "For" ) {
                 // If the popped block is a for then we just start going down the "out" path
-                currentPath = blocks[popPath]["connections"]["Code to Execute"];
+                currentPath = blocks[popPath]["connections"]["Out"];
                 closeBrackets(popBlockType);
                 console.info("Popping back to the last For block at " + currentPath);
             } else if ( popBlockType == "If/Else" ) {
