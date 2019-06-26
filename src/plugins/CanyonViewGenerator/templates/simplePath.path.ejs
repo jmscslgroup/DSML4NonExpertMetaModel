@@ -116,9 +116,9 @@ closeUnclosedBrackets();
        // errors.
        let blockType = blocks[blockPath]["type"];%>
 <%_     if ( blockType == "For" ) { %>
-<%_         let r = Math.random().toString(36).substring(7);%>
-for( int <%-r%> = 0; <%-r%> < <%-blocks[blockPath]["attributes"]["times"]%>; <%-r%>++ ) {
-<%_     } else if ( blockType == "While" ) { %>
+<%_         let r = Math.random().toString(36).substring(7);
+%>for( int <%-r%> = 0; <%-r%> < <%-blocks[blockPath]["attributes"]["times"]%>; <%-r%>++ ) {<%
+     } else if ( blockType == "While" ) { %>
 While
 <%_     } else if ( blockType == "If/Else" || blockType == "If" ) { %>
 if( <%-blocks[blocks[blockPath]["connections"]["Condition"]]["type"]%>() ) {
@@ -128,9 +128,9 @@ Hazard();
 Horn();
 <%_     } else if ( blockType == "Left_Signal" ) { %>
 LeftSignal();
-<%_     } else if ( blockType == "Right_Signal" ) { %>
-RightSignal();
-<%_     } else if ( blockType == "Left" ) { %>
+<%_     } else if ( blockType == "Right_Signal" ) { 
+%>RightSignal();<%
+        } else if ( blockType == "Left" ) { %>
 Left();
 <%_     } else if ( blockType == "Right" ) { %>
 Right();

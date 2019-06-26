@@ -10,11 +10,15 @@
 define([
     'plugin/PluginConfig',
     'text!./metadata.json',
-    'plugin/PluginBase'
+    'plugin/PluginBase',
+    "ejs",
+    "./templates/Templates"
 ], function (
     PluginConfig,
     pluginMetadata,
-    PluginBase) {
+    PluginBase,
+    ejs,
+    Templates) {
     'use strict';
 
     pluginMetadata = JSON.parse(pluginMetadata);
@@ -56,7 +60,7 @@ define([
         // Call the promise that loads all of the nodes within the
         // model view. All business logic is done within the .then{}
         this.loadNodeMap(this.activeNode)
-            .then( (nodes) => {
+            .then( async (nodes) => {
                 // Ensure there is at least 1 node
                 // TODO: Minimum number of nodes?
                 if (nodes.size < 1) {
@@ -70,6 +74,9 @@ define([
 
                 // Get all of the connections between blocks
                 this.getBlockConnections(blocks, nodes);
+
+                let renderedSimple = await ejs.render(Templates["simplePath.path.ejs"], {blocks: blocks});
+                console.log(renderedSimple);
 
                 return this.blobClient.putFile(this.core.getAttribute(this.activeNode, "name") + ".dmsl4kidz", JSON.stringify(blocks));
 
@@ -177,12 +184,18 @@ define([
     CanyonViewGenerator.prototype.getAbstractControlBlock = function(abstractControlBlock) {
         let abstractControlBlockModel = {
             type: "",
-            connections: {}
+            connections: {},
+            attributes: {}
         };
 
         // This is a kludge and I don't like it but it seems like the only quick way to
         // get the meta type of the current node
         let nodeType = this.core.getAttribute(abstractControlBlock, "name");
+
+        // Collect for block times if applicable
+        if( nodeType === "For" ) {
+            abstractControlBlockModel.attributes["times"] = this.core.getAttribute(abstractControlBlock, "times");
+        }
 
         // Stuff the model
         abstractControlBlockModel.type = nodeType;
