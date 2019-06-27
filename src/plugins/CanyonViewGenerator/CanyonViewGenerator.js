@@ -78,6 +78,9 @@ define([
                 let renderedSimple = await ejs.render(Templates["simplePath.path.ejs"], {blocks: blocks});
                 console.log(renderedSimple);
 
+                let renderedCar = await ejs.render(Templates["carsim.ejs"], {blocks: blocks});
+                console.log(renderedCar);
+
                 return this.blobClient.putFile(this.core.getAttribute(this.activeNode, "name") + ".dmsl4kidz", JSON.stringify(blocks));
 
             })
