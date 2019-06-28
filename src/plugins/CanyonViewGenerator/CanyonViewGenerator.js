@@ -34,6 +34,14 @@ define([
         // Call base class' constructor.
         PluginBase.call(this);
         this.pluginMetadata = pluginMetadata;
+        this.LANGUAGES = [
+            {
+                name: 'Python',
+                generated: 'carsim.ejs',
+				fileExtension: 'py',
+				fileName: 'Path'
+            }
+        ];
     }
 
     /**
@@ -80,8 +88,8 @@ define([
 
                 let renderedCar = await ejs.render(Templates["carsim.ejs"], {blocks: blocks});
                 console.log(renderedCar);
-
-                return this.blobClient.putFile(this.core.getAttribute(this.activeNode, "name") + ".dmsl4kidz", JSON.stringify(blocks));
+                this.generateArtifact(blocks);
+                //return this.blobClient.putFile(this.core.getAttribute(this.activeNode, "name") + ".dmsl4kidz", JSON.stringify(blocks));
 
             })
             .then((metadataHash) => {
@@ -275,6 +283,68 @@ define([
         abstractMotionBlockModel.attributes["velocity"] = velocity;
         return abstractMotionBlockModel;
     };
+    CanyonViewGenerator.prototype.addLanguageToFiles = function (filesToAdd, dataModel, languageInfo) {
+	   //var 	genFileName = 'GeneratedCode/' + languageInfo.name + '/' + dataModel.pathModel.name + '.' + languageInfo.fileExtension;//,
+	   var 	genFileName = 'GeneratedCode/' + languageInfo.name + '/' + languageInfo.fileName + '.' + languageInfo.fileExtension;//,
+        //batFileName = 'FSM-GeneratedCode/' + languageInfo.name + '/execute.bat';
 
+        //this.logger.info('addLanguageToFiles()');
+
+        this.logger.info('addLanguageToFiles(): ' + genFileName);
+        //   this.logger.debug(batFileName);
+
+        //this.logger.info('programJsTemplate[languageInfo.generated] = ' + programJsTemplate[languageInfo.generated]);
+        //this.logger.info('programJsTemplate[' + languageInfo.generated + '] = ' + programJsTemplate[languageInfo.generated]);
+        //this.logger.info(JSON.stringify(programJsTemplate, null, 2));
+        //this.logger.info(JSON.stringify(MetaTypes, null, 2));
+        filesToAdd[genFileName] = ejs.render(Templates[languageInfo.generated]);
+        // filesToAdd[batFileName] = ejs.render(TEMPLATES[languageInfo.batFile], dataModel);
+
+        //TODO Add the static files too.
+        this.logger.info('Generated files for', languageInfo.name);
+
+    };
+    CanyonViewGenerator.prototype.generateArtifact = function (dataModel) {
+        var self = this,
+            filesToAdd = {},
+            artifact = self.blobClient.createArtifact('GeneratedFiles');
+
+        //self.logger.info('generateArtifact:' + JSON.stringify(dataModel, null, 2));
+
+        filesToAdd['motionModel.json'] = JSON.stringify(dataModel);
+        filesToAdd['metadata.json'] = JSON.stringify({
+            projectId: self.projectId,
+            commitHash: self.commitHash,
+            branchName: self.branchName,
+            timeStamp: (new Date()).toISOString(),
+            pluginVersion: self.getVersion()
+        }, null, 2);
+        //self.addXmlMotionModel(filesToAdd, dataModel);	// TODO: add
+
+        self.LANGUAGES.forEach(function (languageInfo) {
+            self.logger.info('adding Language...');
+            self.addLanguageToFiles(filesToAdd, dataModel, languageInfo);	// TODO: add
+        });
+
+
+        artifact.addFiles(filesToAdd, function (err) {
+            self.logger.info('artifact.addFiles()...');
+            if (err) {
+
+                return;
+            }
+            self.blobClient.saveAllArtifacts(function (err, hashes) {
+                if (err) {
+
+                    return;
+                }
+
+                self.result.addArtifact(hashes[0]);
+
+
+            });
+        });
+
+    };
     return CanyonViewGenerator;
 });
