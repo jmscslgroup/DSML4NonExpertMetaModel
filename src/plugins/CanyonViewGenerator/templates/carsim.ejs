@@ -1,7 +1,7 @@
 <%
 var velocity = 2;
 var duration = 3;
-var angVel = 2*Math.PI;
+var angVel = Math.PI/(duration*2);
 %>
 #!/usr/bin/env python
 #
@@ -48,9 +48,9 @@ class carsim:
         self.pub_cmd_vel = rospy.Publisher('{0}/cmd_vel'.format(ns), Twist, queue_size=1)
         self.sub_front_cam = rospy.Subscriber('/catvehicle/front_laser_points', LaserScan, self.callback)
         #Initializes default velocity to 2 m/s and wheels are straight
-        self.x = <%-velocity%>
+        self.x = <%=velocity%>
         self.z = 0
-        self.seconds=<%-duration%>
+        self.seconds=<%=duration%>
         #Array of degrees from scanner 180 total 1 per degree value is dist of object
         self.ranges = []
 
@@ -92,11 +92,11 @@ def donkeyKongSafe(node):
 
 #definition of left turn and sends to car to do
 def left(node):
-    node.z = <%-angVel%>
+    node.z = <%=angVel%>
     node.publish()
 #definition of right turn and sends to car to do
 def right(node):
-    node.z = -1*<%-angVel%>
+    node.z = -1*<%=angVel%>
     node.publish()
 #definition of straight and sends to car to do
 def straight(node):
@@ -165,7 +165,7 @@ def createPath(data):
 def main():
     ns='catvehicle'
     #open file
-    with open('/home/sam/turtle_proj_ws/src/turtle_proj/scripts/turtlePath.dmsl4kidz') as json_file:
+    with open('motionModel.json') as json_file:
         data = json.load(json_file)
     #Gets proper connections
     path = createPath(data)
@@ -194,6 +194,8 @@ def main():
             #rate.sleep()
             #rate.sleep()
             #rate.sleep()
+        while 1:
+            straight(node)
         rospy.spin()
 
 if __name__ == '__main__':
