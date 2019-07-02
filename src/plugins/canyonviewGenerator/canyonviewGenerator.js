@@ -57,14 +57,16 @@ define([
                 static: 'path.simulator.txt.ejs',
                 fileExtension: 'txt',
 				fileName: 'Path'
-            },{
+      },/**{
                 name: 'ev3p',
                 generated: 'robot program.ev3p.ejs',
                 static: 'robot program.simulator.ev3p.ejs',
                 fileExtension: 'ev3p',
 				fileName: 'robot program'
             }
+            **/
         ];
+        /**
 	   this.LANGUAGESLEGO = [
 			{
 						 name: 'ev3p',
@@ -72,7 +74,7 @@ define([
 						 static: 'robot program.simulator.ev3p.ejs',
 						 fileExtension: '.ev3p',
 						 fileName: 'robot program'
-							 },{
+           },
 							 name: '___CopyrightYear',
 							 generated: '___CopyrightYear.ejs',
 							 fileExtension: '',
@@ -98,7 +100,7 @@ define([
 							 fileExtension: '.lvprojx',
 							 fileName: 'Project'
 							 }
-		];
+		];**/
     };
 
     /**
@@ -111,7 +113,345 @@ define([
     // Prototypical inheritance from PluginBase.
     canyonviewGenerator.prototype = Object.create(PluginBase.prototype);
     canyonviewGenerator.prototype.constructor = canyonviewGenerator;
+    canyonviewGenerator.prototype.getControlData = function(abstractControlBlock)
+    {
+      var self = this,
+          deferred = new Q.defer(),
+          controlData = {
+              id: self.core.getPath(abstractControlBlock),
+              name: self.core.getAttribute(abstractControlBlock, 'name'),
+              isStart: false,
+              CodeToExecute:[],
+              //distance: self.core.getAttribute(PrimitiveMotionNode, 'Distance')
+              Connections: [
+                  // event: <string>
+                  // targetId: <nodePathStr>
+              ]
+          },
+          error,
+          counter;
 
+          //builds children nodes TODO start with one no connections then work from there
+
+  self.core.loadChildren(abstractControlBlock, async function (err, children)
+  {
+    let curr;
+    let promise1;
+    let promise2;
+    let promise3;
+    if (err) {
+       // Something went wrong!
+       // Handle the error and return.
+       console.log("Error with children");
+    }
+    // We have an array of the children and can get information from them.
+  var i;
+  //get starting child
+  for (i = 0; i < children.length; i++)
+  {
+    console.log(self.core.getAttribute(children[i],'name'));
+    if(!(self.core.isConnection(children[i])))
+    {
+      self.core.loadCollection(children[i], 'dst', function (err, connections) {
+      if (err)
+      {
+        deferred.reject(new Error(err));
+        return;
+      }
+      if(connections.length > 1)
+      {
+        self.logger.error('Multiple incoming connections: ' + connections.length);
+        deferred.reject(new Error('Multiple incoming connections: ' + connections.length));
+        return;
+      }
+      else if(connections.length === 0)
+      {
+        //Curr loses value after for loop ends
+          curr = children[i];
+          console.log('Found the starting child: ' + self.core.getAttribute(children[i],'name'));
+          controlData.CodeToExecute.push(self.core.getAttribute(children[i],'name'));
+          promise1 = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("done!"), 1000)
+  });
+      }
+      });
+    break;
+    }
+  }
+  var k;
+  await promise1;
+  console.log("Async worked? "+self.core.getAttribute(curr,'name'));
+  //Loop through src of curr node to add next nodes
+  for(k=0;k<children.length/2;k++)
+  {
+    console.log("Current node: "+self.core.getAttribute(curr,'name'));
+    self.core.loadCollection(curr, 'src', async function (err, connections)
+    {
+        if (err)
+        {
+            deferred.reject(new Error(err));
+            return;
+        }
+        var i;
+        counter = connections.length;
+        if(connections.length > 1)
+        {
+          self.logger.error('Multiple outgoing connections: ' + connections.length);
+          deferred.reject(new Error('Multiple outgoing connections: ' + connections.length));
+          return;
+        }
+      // For each connection load the destination state.
+        for (i = 0; i < connections.length; i += 1)
+        {
+          self.core.loadPointer(connections[i], 'dst', async function (err, dstNode) {
+  if (err) {
+    // Handle error
+    console.log("Error finding dst");
+  }
+  // Here we have access to the dstNode.
+  controlData.CodeToExecute.push(self.core.getAttribute(dstNode,'name'));
+  console.log("Added to list: "+self.core.getAttribute(dstNode,'name'));
+  promise2 = new Promise((resolve, reject) => {
+setTimeout(() => resolve("I don't do anything :(!"), 1000)
+});
+});
+await promise2;
+          curr = controlData.CodeToExecute[controlData.CodeToExecute.length-1];
+        }
+        if (connections.length === 0)
+        {
+          deferred.resolve(controlData);
+        }
+      });
+
+    }
+  });
+
+
+
+          function atDestinationControl(connection) {
+
+              return function (err, dstControl) {
+                  console.log('In atDestinationControl(connection), length = ' + controlData.Connections.length);
+                  if (err) {
+                      error = new Error(err);
+                  } else {
+                      if(controlData.Connections.length >= 1) {
+
+                          self.logger.error('Multiple Incoming connections: ' + controlData.Connections.length);
+                          deferred.reject(new Error('Multiple Incoming connections: ' + controlData.Connections.length));
+                          return;
+                      }
+                      controlData.Connections.push({
+  //											distance: self.core.getAttribute(connection, 'Distance'),
+  //											velocity: self.core.getAttribute(connection, 'Velocity'),
+                          targetId: self.core.getPath(dstControl),
+                          targetName: self.core.getAttribute(dstControl, 'name'),
+                      });
+                  }
+
+                  counter -= 1;
+                  if (counter === 0) {
+                      if (error) {
+                          deferred.reject(error);
+                      } else {
+                          deferred.resolve(controlData);
+                      }
+                    }
+                  }
+                }
+                if (self.isMetaTypeOf(abstractControlBlock, self.META.For) === true) {
+                  console.log('FOR LOOP');
+                  controlData.Type = 6;
+                  controlData.Times = self.core.getAttribute(abstractControlBlock,'times');
+              }
+              else if(self.isMetaTypeOf(abstractControlBlock,self.META.While)===true)
+              {
+                console.log('While LOOP');
+                var condition= self.core.getAttribute(abstractControlBlock,'condition');
+                let condNum=-1;
+                if(condition==="SafeLeft")
+                {
+                  condNum = 1;
+                }
+                else if(condition==="SafeStraight")
+                {
+                  condNum = 2;
+                }
+                else
+                {
+                  condNum = 3;
+                }
+                controlData.Condition = condNum;
+                controlData.Type = 7;
+              }
+              else if(self.isMetaTypeOf(abstractControlBlock,self.META.If)===true)
+              {
+                console.log('If');
+                var condition= self.core.getAttribute(abstractControlBlock,'condition');
+                let condNum=-1;
+                if(condition==="SafeLeft")
+                {
+                  condNum = 1;
+                }
+                else if(condition==="SafeStraight")
+                {
+                  condNum = 2;
+                }
+                else
+                {
+                  condNum = 3;
+                }
+                controlData.Condition = condNum;
+                controlData.Type = 8;
+              }
+              // Load all connections going out from the stateNode, i.e. has the stateNode as 'src'.
+              self.core.loadCollection(abstractControlBlock, 'src', function (err, connections) {
+                  if (err) {
+                      deferred.reject(new Error(err));
+                      return;
+                  }
+                  var i;
+                  counter = connections.length;
+
+                  if(connections.length > 1) {
+                      self.logger.error('Multiple outgoing connections: ' + connections.length);
+                      deferred.reject(new Error('Multiple outgoing connections: ' + connections.length));
+                      return;
+                  }
+                  // For each connection load the destination state.
+                  for (i = 0; i < connections.length; i += 1) {
+                      self.core.loadPointer(connections[i], 'dst', atDestinationControl(connections[i]));
+                  }
+
+                  // Make sure to resolve when there are no connections.
+                  if (connections.length === 0) {
+                      deferred.resolve(controlData);
+                  }
+              });
+              self.core.loadCollection(abstractControlBlock, 'dst', function (err, connections) {
+                  if (err) {
+                      deferred.reject(new Error(err));
+                      return;
+                  }
+                  if(connections.length > 1) {
+                      self.logger.error('Multiple incoming connections: ' + connections.length);
+                      deferred.reject(new Error('Multiple incoming connections: ' + connections.length));
+                      return;
+                  } else if(connections.length == 0) {
+                      console.log('Found the starting control: ' + self.core.getPath(abstractControlBlock));
+                      controlData.isStart = true;
+                  }
+              });
+
+              return deferred.promise;
+}
+    canyonviewGenerator.prototype.getActionData= function(abstractActionBlock)
+    {
+      var self = this,
+          deferred = new Q.defer(),
+          actionData = {
+              id: self.core.getPath(abstractActionBlock),
+              name: self.core.getAttribute(abstractActionBlock, 'name'),
+              isStart: false,
+              Connections: [
+                  // event: <string>
+                  // targetId: <nodePathStr>
+              ]
+          },
+          error,
+          counter;
+          function atDestinationAction(connection) {
+
+              return function (err, dstAction) {
+                  console.log('In atDestinationAction(connection), length = ' + actionData.Connections.length);
+                  if (err) {
+                      error = new Error(err);
+                  } else {
+                      if(actionData.Connections.length >= 1) {
+
+                          self.logger.error('Multiple Incoming connections: ' + actionData.Connections.length);
+                          deferred.reject(new Error('Multiple Incoming connections: ' + actionData.Connections.length));
+                          return;
+                      }
+                      actionData.Connections.push({
+  //											distance: self.core.getAttribute(connection, 'Distance'),
+  //											velocity: self.core.getAttribute(connection, 'Velocity'),
+                          targetId: self.core.getPath(dstAction),
+                          targetName: self.core.getAttribute(dstAction, 'name'),
+                      });
+                  }
+
+                  counter -= 1;
+                  if (counter === 0) {
+                      if (error) {
+                          deferred.reject(error);
+                      } else {
+                          deferred.resolve(actionData);
+                      }
+
+                                }
+                              }
+                            }
+                            if (self.isMetaTypeOf(abstractActionBlock, self.META.Horn) === true) {
+                              console.log('Horn');
+                              actionData.Type = 9;
+                          }
+                          else if(self.isMetaTypeOf(abstractActionBlock,self.META.LeftSignal)===true)
+                          {
+                              console.log('Left Signal');
+                            actionData.Type = 10;
+                          }
+                          else if(self.isMetaTypeOf(abstractActionBlock,self.META.RightSignal)===true)
+                          {
+                              console.log('Right Signal');
+                            actionData.Type = 11;
+                          }
+                          else if(self.isMetaTypeOf(abstractActionBlock,self.META.Hazard)===true)
+                          {
+                              console.log('Hazard');
+                            actionData.Type = 12;
+                          }
+                          self.core.loadCollection(abstractActionBlock, 'src', function (err, connections) {
+                              if (err) {
+                                  deferred.reject(new Error(err));
+                                  return;
+                              }
+                              var i;
+                              counter = connections.length;
+
+                              if(connections.length > 1) {
+                                  self.logger.error('Multiple outgoing connections: ' + connections.length);
+                                  deferred.reject(new Error('Multiple outgoing connections: ' + connections.length));
+                                  return;
+                              }
+                              // For each connection load the destination state.
+                              for (i = 0; i < connections.length; i += 1) {
+                                  self.core.loadPointer(connections[i], 'dst', atDestinationAction(connections[i]));
+                              }
+
+                              // Make sure to resolve when there are no connections.
+                              if (connections.length === 0) {
+                                  deferred.resolve(actionData);
+                              }
+                          });
+                          self.core.loadCollection(abstractActionBlock, 'dst', function (err, connections) {
+                              if (err) {
+                                  deferred.reject(new Error(err));
+                                  return;
+                              }
+                              if(connections.length > 1) {
+                                  self.logger.error('Multiple incoming connections: ' + connections.length);
+                                  deferred.reject(new Error('Multiple incoming connections: ' + connections.length));
+                                  return;
+                              } else if(connections.length == 0) {
+                                  console.log('Found the starting motion: ' + self.core.getPath(abstractActionBlock));
+                                  actionData.isStart = true;
+                              }
+                          });
+
+                          return deferred.promise;
+    }
     canyonviewGenerator.prototype.getMotionData = function(PrimitiveMotionNode) {
         var self = this,
             deferred = new Q.defer(),
@@ -121,7 +461,7 @@ define([
                 isStart: false,
                 //distance: self.core.getAttribute(PrimitiveMotionNode, 'Distance'),
                 velocity: self.core.getAttribute(PrimitiveMotionNode, 'Velocity'),
-                PrimitiveMotionConnections: [
+                Connections: [
                     // event: <string>
                     // targetId: <nodePathStr>
                 ]
@@ -131,18 +471,18 @@ define([
         function atDestinationMotion(connection) {
 
             return function (err, dstMotion) {
-                console.log('In atDestinationMotion(connection), length = ' + motionData.PrimitiveMotionConnections.length);
+                console.log('In atDestinationMotion(connection), length = ' + motionData.Connections.length);
                 if (err) {
                     error = new Error(err);
                 } else {
-                    if(motionData.PrimitiveMotionConnections.length >= 1) {
+                    if(motionData.Connections.length >= 1) {
 
-                        self.logger.error('Multiple Incoming connections: ' + motionData.PrimitiveMotionConnections.length);
-                        deferred.reject(new Error('Multiple Incoming connections: ' + motionData.PrimitiveMotionConnections.length));
+                        self.logger.error('Multiple Incoming connections: ' + motionData.Connections.length);
+                        deferred.reject(new Error('Multiple Incoming connections: ' + motionData.Connections.length));
                         return;
                     }
 
-                    motionData.PrimitiveMotionConnections.push({
+                    motionData.Connections.push({
 //											distance: self.core.getAttribute(connection, 'Distance'),
 //											velocity: self.core.getAttribute(connection, 'Velocity'),
                         targetId: self.core.getPath(dstMotion),
@@ -168,21 +508,25 @@ define([
             motionData.Distance = self.core.getAttribute(PrimitiveMotionNode, 'Distance');
             motionData.FinalTurnAngle = 0;
         } else if (self.isMetaTypeOf(PrimitiveMotionNode, self.META.Left) === true) {
+          console.log("Left");
             motionData.Type = 2;
             motionData.RadOfCurvature = self.core.getAttribute(PrimitiveMotionNode, 'RadOfCurvature');
             motionData.Distance = 0;
             motionData.FinalTurnAngle = self.core.getAttribute(PrimitiveMotionNode, 'FinalTurnAngle');
         } else if (self.isMetaTypeOf(PrimitiveMotionNode, self.META.Right) === true) {
+          console.log("Right");
             motionData.Type = 3;
             motionData.RadOfCurvature = self.core.getAttribute(PrimitiveMotionNode, 'RadOfCurvature');
             motionData.Distance = 0;
             motionData.FinalTurnAngle = self.core.getAttribute(PrimitiveMotionNode, 'FinalTurnAngle');
         } else if (self.isMetaTypeOf(PrimitiveMotionNode, self.META.ZigZagLeft) === true) {
+          console.log("ZigZagLeft");
             motionData.Type = 4;
             motionData.RadOfCurvature = 0;
             motionData.Distance = 0;
             motionData.FinalTurnAngle = 0;
         } else if (self.isMetaTypeOf(PrimitiveMotionNode, self.META.ZigZagRight) === true) {
+          console.log("ZigZagRight");
             motionData.Type = 5;
             motionData.RadOfCurvature = 0;
             motionData.Distance = 0;
@@ -283,6 +627,22 @@ define([
 
                     self.logger.info(' - metaType = ' + metaType);
                 }
+                else if(self.isMetaTypeOf(children[i],self.META.PrimitiveControl)===true)
+                {
+                  self.logger.info(' - Found primitive control!');
+                  primitivePromises.push(self.getControlData(children[i]));
+                  metaType = self.core.getAttribute(self.getMetaType(children[i]), 'name');
+
+                  self.logger.info(' - metaType = ' + metaType);
+                }
+                else if(self.isMetaTypeOf(children[i],self.META.PrimitiveAction)===true)
+                {
+                  self.logger.info(' - Found primitive action!');
+                  primitivePromises.push(self.getActionData(children[i]));
+                  metaType = self.core.getAttribute(self.getMetaType(children[i]), 'name');
+
+                  self.logger.info(' - metaType = ' + metaType);
+                }
             }
 
             Q.all(primitivePromises)
@@ -307,7 +667,7 @@ define([
         //     })
         //     .nodeify(callback);
     }
-
+/**
 	canyonviewGenerator.prototype.addLanguageToFilesLego = function (filesToAdd, dataModel, languageInfo) {
 	   //var 	genFileName = 'GeneratedCode/' + languageInfo.name + '/' + dataModel.pathModel.name + '.' + languageInfo.fileExtension;//,
 	   var 	genFileName = languageInfo.fileName + languageInfo.fileExtension;//,
@@ -330,7 +690,7 @@ define([
 	   this.logger.info('Generated lego files for', languageInfo.name);
 
     };
-
+**/
     canyonviewGenerator.prototype.addLanguageToFiles = function (filesToAdd, dataModel, languageInfo) {
 	   //var 	genFileName = 'GeneratedCode/' + languageInfo.name + '/' + dataModel.pathModel.name + '.' + languageInfo.fileExtension;//,
 	   var 	genFileName = 'GeneratedCode/' + languageInfo.name + '/' + languageInfo.fileName + '.' + languageInfo.fileExtension;//,
@@ -354,12 +714,12 @@ define([
 
     };
 
-	canyonviewGenerator.prototype.generateArtifactLego = function (dataModel) {
-	   var self = this,
-	   filesToAdd = {},
-	   deferred = new Q.defer(),
-	   jsonToXml = new Converter.JsonToXml(),
-	   artifact = self.blobClient.createArtifact('lego');
+	//canyonviewGenerator.prototype.generateArtifactLego = function (dataModel) {
+	   //var self = this,
+	   ///filesToAdd = {},
+	   //deferred = new Q.defer(),
+	   //jsonToXml = new Converter.JsonToXml(),
+	   //artifact = self.blobClient.createArtifact('lego');
 
 	   //self.logger.info('generateArtifact:' + JSON.stringify(dataModel, null, 2));
 
@@ -372,13 +732,12 @@ define([
 		//											pluginVersion: self.getVersion()
 		//											}, null, 2);
 	   //self.addXmlMotionModel(filesToAdd, dataModel);	// TODO: add
-
+/**
 	   self.logger.info('generateArtifactLego(): ' + artifact.name);
 	   self.LANGUAGESLEGO.forEach(function (languageInfo) {
 							  self.logger.info('adding Language...');
 							  self.addLanguageToFilesLego(filesToAdd, dataModel, languageInfo);	// TODO: add
 							  });
-
 
 	   artifact.addFiles(filesToAdd, function (err) {
 						 self.logger.info('artifact.addFiles()...');
@@ -400,7 +759,7 @@ define([
 
 	   return deferred.promise;
     };
-
+**/
     canyonviewGenerator.prototype.generateArtifact = function (dataModel) {
         var self = this,
             filesToAdd = {},
@@ -494,7 +853,11 @@ define([
             expectedX,
             expectedY,
             currentDirection = pathModel.startDirection;
+            deferred.resolve(dataModel);
 
+            return deferred.promise;
+          }
+/**
         self.logger.info('In modelCheck()');
         // Convert the calues to what the class expects:
         currentX = self.letterToNumber(pathModel.startX);
@@ -669,7 +1032,7 @@ define([
 		if( currentX == self.letterToNumber(pathModel.obstacleX) && currentY == (gridSize-pathModel.obstacleY)) {
                 deferred.reject(new Error('Ran into an obstacle on motion #' + count ));
                 return deferred.promise;
-		
+
 	}
 
             haveMotion = false;
@@ -715,8 +1078,7 @@ define([
 
         return deferred.promise;
     };
-
-
+**/
     /**
      * Main function for the plugin to execute. This will perform the execution.
      * Notes:
@@ -764,10 +1126,11 @@ define([
                 self.logger.info('generating artifacts!');
                 return self.generateArtifact(dataModel);
             })
-	   		.then(function (dataModel) {
-			 	self.logger.info('generating Lego artifacts!');
-			 	return self.generateArtifactLego(dataModel);
-			 })
+
+	   		//.then(function (dataModel) {
+			 	//self.logger.info('generating Lego artifacts!');
+			 	//return self.generateArtifactLego(dataModel);
+			 //})
             .then(function () {
                 //  console.log('generateDataModel().then().then(): dataModel: ' + JSON.stringify(dataModel, null, 4));
                 console.log('In success part');
