@@ -36,22 +36,32 @@ function StraightController_NOGPS(vel_publisher, vel_subscriber,sens_sub,data)
         dt = tic;
         %%%DK Implementation
         for(i = 1:size(scan))
-            if scan(i)<5
+            if scan(i)<1
                 disp("Unsafe");
                 cmd_vel.Linear.X = 0;
                 send(vel_publisher, cmd_vel);
                 move = false;
                 while(move ==false)
+                    disp("Hit");
                     move = true;
-                    for(i = 1:size(scan))
-                    if scan(i)<5
-                        move = false;
+                    sensor = receive(sens_sub,10);
+                    scan = sensor.Ranges;
+                    min = scan(1);
+                    for(j = 1:size(scan))
+                    if scan(j)<min
+                        min = scan(j);
+                        end
+                    if(scan(j)<1)
+                        move=false;
+                    end 
                     end
-                    end
+                    disp("Minimum dist is "+min);
+                    disp("Move is "+move);
                 end
                 cmd_vel.Linear.X = data(3);
                 disp("Safe again!");
-            end        
+            end
+            break
         end
         send(vel_publisher, cmd_vel);
     end %while (distance)
