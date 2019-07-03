@@ -1,0 +1,106 @@
+{
+  "pathModel": {
+    "name": "PathA",
+    "startX": "A",
+    "startY": 1,
+    "startDirection": "S",
+    "endX": "D",
+    "endY": 1,
+    "endDirection": "N",
+    "obstacleY": " ",
+    "obstacleX": " ",
+    "motion": [
+      {
+        "id": "/Q/r/k",
+        "name": "Straight",
+        "isStart": true,
+        "velocity": 2,
+        "PrimitiveMotionConnections": [
+          {
+            "targetId": "/Q/r/m",
+            "targetName": "Straight"
+          }
+        ],
+        "Type": 1,
+        "RadOfCurvature": 0,
+        "Distance": 15,
+        "FinalTurnAngle": 0
+      },
+      {
+        "id": "/Q/r/m",
+        "name": "Straight",
+        "isStart": false,
+        "velocity": 2,
+        "PrimitiveMotionConnections": [
+          {
+            "targetId": "/Q/r/H",
+            "targetName": "Left"
+          }
+        ],
+        "Type": 1,
+        "RadOfCurvature": 0,
+        "Distance": 15,
+        "FinalTurnAngle": 0
+      },
+      {
+        "id": "/Q/r/H",
+        "name": "Left",
+        "isStart": false,
+        "velocity": 2,
+        "PrimitiveMotionConnections": [
+          {
+            "targetId": "/Q/r/P",
+            "targetName": "Left"
+          }
+        ],
+        "Type": 2,
+        "RadOfCurvature": 15,
+        "Distance": 0,
+        "FinalTurnAngle": 90
+      },
+      {
+        "id": "/Q/r/P",
+        "name": "Left",
+        "isStart": false,
+        "velocity": 2,
+        "PrimitiveMotionConnections": [
+          {
+            "targetId": "/Q/r/G",
+            "targetName": "ZigZagRight"
+          }
+        ],
+        "Type": 2,
+        "RadOfCurvature": 15,
+        "Distance": 0,
+        "FinalTurnAngle": 90
+      },
+      {
+        "id": "/Q/r/G",
+        "name": "ZigZagRight",
+        "isStart": false,
+        "velocity": 2,
+        "PrimitiveMotionConnections": [
+          {
+            "targetId": "/Q/r/O",
+            "targetName": "Straight"
+          }
+        ],
+        "Type": 5,
+        "RadOfCurvature": 0,
+        "Distance": 0,
+        "FinalTurnAngle": 0
+      },
+      {
+        "id": "/Q/r/O",
+        "name": "Straight",
+        "isStart": false,
+        "velocity": 2,
+        "PrimitiveMotionConnections": [],
+        "Type": 1,
+        "RadOfCurvature": 0,
+        "Distance": 15,
+        "FinalTurnAngle": 0
+      }
+    ]
+  }
+}
