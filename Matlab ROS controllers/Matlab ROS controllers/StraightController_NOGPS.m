@@ -38,10 +38,21 @@ function StraightController_NOGPS(vel_publisher, vel_subscriber,sens_sub,data)
         for(i = 1:size(scan))
             if scan(i)<5
                 disp("Unsafe");
-                HaltController(vel_publisher,.05);
-            else
+                cmd_vel.Linear.X = 0;
                 send(vel_publisher, cmd_vel);
-            end 
+                move = false;
+                while(move ==false)
+                    move = true;
+                    for(i = 1:size(scan))
+                    if scan(i)<5
+                        move = false;
+                    end
+                    end
+                end
+                cmd_vel.Linear.X = data(3);
+                disp("Safe again!");
+            end        
         end
+        send(vel_publisher, cmd_vel);
     end %while (distance)
     end %function
