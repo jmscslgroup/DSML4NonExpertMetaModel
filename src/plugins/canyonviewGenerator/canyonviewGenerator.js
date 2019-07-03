@@ -132,27 +132,35 @@ define([
           counter;
 
           //builds children nodes TODO start with one no connections then work from there
+let curr;
+let promise1;
+
 
   self.core.loadChildren(abstractControlBlock, async function (err, children)
   {
-    let curr;
-    let promise1;
-    let promise2;
-    let promise3;
+
+
     if (err) {
        // Something went wrong!
        // Handle the error and return.
        console.log("Error with children");
     }
     // We have an array of the children and can get information from them.
-  var i;
-  //get starting child
-  for (i = 0; i < children.length; i++)
+  //get non-connection nodes
+  let nonConn = [];
+  children.forEach(async (child)=>
   {
-    console.log(self.core.getAttribute(children[i],'name'));
-    if(!(self.core.isConnection(children[i])))
+    if(!(self.core.isConnection(child)))
     {
-      self.core.loadCollection(children[i], 'dst', function (err, connections) {
+      nonConn.push(child);
+    }
+  })
+  //get starting child
+  nonConn.forEach(async (child)=>
+  {
+    console.log(self.core.getAttribute(child,'name'));
+
+      self.core.loadCollection(child, 'dst', function (err, connections) {
       if (err)
       {
         deferred.reject(new Error(err));
@@ -167,22 +175,22 @@ define([
       else if(connections.length === 0)
       {
         //Curr loses value after for loop ends
-          curr = children[i];
-          console.log('Found the starting child: ' + self.core.getAttribute(children[i],'name'));
-          controlData.CodeToExecute.push(self.core.getAttribute(children[i],'name'));
+          curr = child;
+          console.log('Found the starting child: ' + self.core.getAttribute(child,'name'));
+          controlData.CodeToExecute.push(self.core.getAttribute(child,'name'));
           promise1 = new Promise((resolve, reject) => {
-    setTimeout(() => resolve("done!"), 1000)
+    setTimeout(() => resolve("Found Start!"), 1000)
   });
       }
       });
-    break;
-    }
-  }
+  })
   var k;
   await promise1;
   console.log("Async worked? "+self.core.getAttribute(curr,'name'));
+
   //Loop through src of curr node to add next nodes
-  for(k=0;k<children.length/2;k++)
+  var k;
+  for(k=0;k<nonConn.length-1;k++)
   {
     console.log("Current node: "+self.core.getAttribute(curr,'name'));
     self.core.loadCollection(curr, 'src', async function (err, connections)
@@ -203,30 +211,32 @@ define([
       // For each connection load the destination state.
         for (i = 0; i < connections.length; i += 1)
         {
-          self.core.loadPointer(connections[i], 'dst', async function (err, dstNode) {
-  if (err) {
-    // Handle error
-    console.log("Error finding dst");
-  }
-  // Here we have access to the dstNode.
-  controlData.CodeToExecute.push(self.core.getAttribute(dstNode,'name'));
-  console.log("Added to list: "+self.core.getAttribute(dstNode,'name'));
-  promise2 = new Promise((resolve, reject) => {
-setTimeout(() => resolve("I don't do anything :(!"), 1000)
-});
-});
-await promise2;
-          curr = controlData.CodeToExecute[controlData.CodeToExecute.length-1];
+          await self.core.loadPointer(connections[i], 'dst', getNextChild(connections[i]));
         }
         if (connections.length === 0)
         {
           deferred.resolve(controlData);
         }
-      });
+    })
 
-    }
+  }
   });
-
+function getNextChild(connection)
+{
+  return function(err, dstNode) {
+  if (err) {
+  // Handle error
+  console.log("Error loading dest");
+  }
+  // Here we have access to the dstNode.
+  curr = dstNode;
+  controlData.CodeToExecute.push(self.core.getAttribute(dstNode,'name'));
+  console.log("Added to list: "+self.core.getAttribute(dstNode,'name'));
+  return new Promise((resolve, reject) => {
+setTimeout(() => resolve("Added Node!"), 1000)
+});
+}
+}
 
 
           function atDestinationControl(connection) {
