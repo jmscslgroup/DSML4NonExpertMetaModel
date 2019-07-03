@@ -136,7 +136,7 @@ let curr;
 let promise1;
 let promise2;
 
-  self.core.loadChildren(abstractControlBlock, async function (err, children)
+  await new Promise(done=>{ self.core.loadChildren(abstractControlBlock, async function (err, children)
   {
 
 
@@ -223,13 +223,18 @@ let promise2;
     })
   })
   }
-  console.log("This is list after: "+controlData.CodeToExecute);
-  promise2 = new Promise((resolve, reject) => {
-setTimeout(() => resolve("Done!"), 1000)
-});
+console.log("This is list after: "+controlData.CodeToExecute);
+done();
   });
-  await promise2;
-console.log("This is list after2: "+controlData.CodeToExecute);
+
+});
+function done()
+{
+  console.log("Finished parsing kids hopefully CodeToExecute is updated");
+}
+
+
+
 
 function getNextChild(connection)
 {
@@ -416,12 +421,12 @@ function getNextChild(connection)
                               console.log('Horn');
                               actionData.Type = 9;
                           }
-                          else if(self.isMetaTypeOf(abstractActionBlock,self.META.LeftSignal)===true)
+                          else if(self.isMetaTypeOf(abstractActionBlock,self.META.Left_Signal)===true)
                           {
                               console.log('Left Signal');
                             actionData.Type = 10;
                           }
-                          else if(self.isMetaTypeOf(abstractActionBlock,self.META.RightSignal)===true)
+                          else if(self.isMetaTypeOf(abstractActionBlock,self.META.Right_Signal)===true)
                           {
                               console.log('Right Signal');
                             actionData.Type = 11;
