@@ -82,22 +82,25 @@ function TurnController_NOGPS(velocity_publisher, vel_subscriber,sens_sub, data)
         %%%END DEBUG
         %%%DK Implementation
         for(i = 1:size(scan))
-            if scan(i)<5
+            if scan(i)<1
                 disp("Unsafe");
                 cmd_vel.Linear.X = 0;
                 send(velocity_publisher, cmd_vel);
                 move = false;
                 while(move ==false)
                     move = true;
-                    for(i = 1:size(scan))
-                    if scan(i)<5
+                    sensor = receive(sens_sub,10);
+                    scan = sensor.Ranges;
+                    for(j = 1:size(scan))
+                    if scan(j)<1
                         move = false;
                     end
                     end
                 end
                 cmd_vel.Linear.X = velocity;
                 disp("Safe again!");
-            end        
+            end
+            break
         end
         send(velocity_publisher, cmd_vel);
         dt = tic;       
