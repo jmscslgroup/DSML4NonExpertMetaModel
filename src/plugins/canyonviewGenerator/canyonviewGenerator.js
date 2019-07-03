@@ -113,7 +113,7 @@ define([
     // Prototypical inheritance from PluginBase.
     canyonviewGenerator.prototype = Object.create(PluginBase.prototype);
     canyonviewGenerator.prototype.constructor = canyonviewGenerator;
-    canyonviewGenerator.prototype.getControlData = function(abstractControlBlock)
+    canyonviewGenerator.prototype.getControlData = async function(abstractControlBlock)
     {
       var self = this,
           deferred = new Q.defer(),
@@ -134,7 +134,7 @@ define([
           //builds children nodes TODO start with one no connections then work from there
 let curr;
 let promise1;
-
+let promise2;
 
   self.core.loadChildren(abstractControlBlock, async function (err, children)
   {
@@ -184,16 +184,18 @@ let promise1;
       }
       });
   })
-  var k;
+
   await promise1;
   console.log("Async worked? "+self.core.getAttribute(curr,'name'));
 
   //Loop through src of curr node to add next nodes
-  var k;
+  let k;
   for(k=0;k<nonConn.length-1;k++)
   {
     console.log("Current node: "+self.core.getAttribute(curr,'name'));
-    self.core.loadCollection(curr, 'src', async function (err, connections)
+
+    await new Promise(next=>{
+      self.core.loadCollection(curr, 'src', function (err, connections)
     {
         if (err)
         {
@@ -211,16 +213,24 @@ let promise1;
       // For each connection load the destination state.
         for (i = 0; i < connections.length; i += 1)
         {
-          await self.core.loadPointer(connections[i], 'dst', getNextChild(connections[i]));
+        self.core.loadPointer(connections[i], 'dst', getNextChild(connections[i]));
         }
         if (connections.length === 0)
         {
           deferred.resolve(controlData);
         }
+        next()
     })
-
+  })
   }
+  console.log("This is list after: "+controlData.CodeToExecute);
+  promise2 = new Promise((resolve, reject) => {
+setTimeout(() => resolve("Done!"), 1000)
+});
   });
+  await promise2;
+console.log("This is list after2: "+controlData.CodeToExecute);
+
 function getNextChild(connection)
 {
   return function(err, dstNode) {
@@ -230,11 +240,10 @@ function getNextChild(connection)
   }
   // Here we have access to the dstNode.
   curr = dstNode;
-  controlData.CodeToExecute.push(self.core.getAttribute(dstNode,'name'));
+  controlData.CodeToExecute.push(self.core.getAttribute(curr,'name'));
+  console.log(controlData.CodeToExecute);
   console.log("Added to list: "+self.core.getAttribute(dstNode,'name'));
-  return new Promise((resolve, reject) => {
-setTimeout(() => resolve("Added Node!"), 1000)
-});
+
 }
 }
 
