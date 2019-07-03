@@ -84,11 +84,22 @@ function TurnController_NOGPS(velocity_publisher, vel_subscriber,sens_sub, data)
         for(i = 1:size(scan))
             if scan(i)<5
                 disp("Unsafe");
-                HaltController(velocity_publisher,.05);
-            else
+                cmd_vel.Linear.X = 0;
                 send(velocity_publisher, cmd_vel);
-            end 
+                move = false;
+                while(move ==false)
+                    move = true;
+                    for(i = 1:size(scan))
+                    if scan(i)<5
+                        move = false;
+                    end
+                    end
+                end
+                cmd_vel.Linear.X = velocity;
+                disp("Safe again!");
+            end        
         end
+        send(velocity_publisher, cmd_vel);
         dt = tic;       
       end %while
 end %function
