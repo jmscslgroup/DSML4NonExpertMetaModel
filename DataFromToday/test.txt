@@ -1,0 +1,6 @@
+failed_riley_in_the_way_1.bag
+	Riley in the "way" of the car to the left until the car stopped and then she moved out of the way.
+	The car stopped and said unsafe but then did not resume.
+
+example_path_1_ssls.bag
+	Example path with obsticles in the way
