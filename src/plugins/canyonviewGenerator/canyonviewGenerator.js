@@ -177,7 +177,28 @@ let promise2;
         //Curr loses value after for loop ends
           curr = child;
           console.log('Found the starting child: ' + self.core.getAttribute(child,'name'));
-          controlData.CodeToExecute.push(self.core.getAttribute(child,'name'));
+          //TODO change to type not name push->easy read into matlab
+          var name = self.core.getAttribute(child,'name');
+          var type;
+          if(name ==='Straight')
+            type=1;
+          else if(name==='Left')
+            type = 2;
+          else if (name==='Right')
+            type = 3;
+          else if(name==='ZigZagLeft')
+            type = 4;
+          else if (name==='ZigZagRight')
+            type = 5;
+          else if(name==='Horn')
+            type = 9;
+          else if (name==='Left_Signal')
+            type = 10;
+          else if(name==='Right_Signal')
+            type = 11;
+          else if (name==='Hazard')
+            type = 12;
+          controlData.CodeToExecute.push(type);
           promise1 = new Promise((resolve, reject) => {
     setTimeout(() => resolve("Found Start!"), 1000)
   });
@@ -245,7 +266,27 @@ function getNextChild(connection)
   }
   // Here we have access to the dstNode.
   curr = dstNode;
-  controlData.CodeToExecute.push(self.core.getAttribute(curr,'name'));
+  var name = self.core.getAttribute(curr,'name');
+  var type;
+  if(name ==='Straight')
+    type=1;
+  else if(name==='Left')
+    type = 2;
+  else if (name==='Right')
+    type = 3;
+  else if(name==='ZigZagLeft')
+    type = 4;
+  else if (name==='ZigZagRight')
+    type = 5;
+  else if(name==='Horn')
+    type = 9;
+  else if (name==='Left_Signal')
+    type = 10;
+  else if(name==='Right_Signal')
+    type = 11;
+  else if (name==='Hazard')
+    type = 12;
+  controlData.CodeToExecute.push(type);
   console.log(controlData.CodeToExecute);
   console.log("Added to list: "+self.core.getAttribute(dstNode,'name'));
 
