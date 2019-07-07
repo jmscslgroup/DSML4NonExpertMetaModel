@@ -95,22 +95,28 @@ for(i = 1:size(data,1)) %For each row in the path data matrix
             disp('Path complete.');
             return;
         case FOR
-            For(vel_pub,pose_sub,data(i,2),data(i,4));
             disp('For');
+            path = data(i,4:length(data(i,:)));
+            disp("The path is "+path);
+            For(vel_pub,pose_sub,sensor_sub,data(2),path);
         case WHILE
-            While(vel_pub,pose_sub,sensor_sub,data(i,3),data(i,4));
             disp('While');
+            path = data(i,4:length(data(i,:)));
+            disp("The path is "+path);
+            While(vel_pub,pose_sub,sensor_sub,data(3),path);
         case IF
-            If(vel_pub,pose_sub,sensor_sub,data(i,3),data(i,4));
             disp('If');
+            path = data(i,4:length(data(i,:)));
+            disp("The path is "+path);
+            If(vel_pub,pose_sub,sensor_sub,data(3),path);
         case HORN
-            disp('Horn');
+            Horn();
         case LEFTSIGNAL
-            disp('LeftSig');
+            LeftSignal();
         case RIGHTSIGNAL
-            disp('RightSig');
+            RightSignal();
         case HAZARD
-            disp('Hazard');
+            Hazard();
         otherwise % exit now
             disp('Invalid state. Press Ctrl-C to quit');
             HaltController(vel_pub, 0.05); %Change this if you get motion profile timeouts.
