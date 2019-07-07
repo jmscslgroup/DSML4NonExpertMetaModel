@@ -2,12 +2,13 @@ function done = For(velpub,velsub,sensorsub,times,codeToExecute)
 %For does the for loop for language
 %   iterates times times and executes code to execute
 done = false;
-straightData = [1,0,1,12.192,0];
-leftTurnData = [2,12.192,1,0,90];
-rightTurnData = [3,12.192,1,0,90];
-zigzagTurnData = [3, 6.096, 1, 0, 90];
-zigzagTurnData1 = [2, 6.096, 1, 0, 90];
-for(i = 1:times)
+straightData = [1,0,1*1.25,12.192*(40+40)/(40+40+4),0];
+leftTurnData = [2,12.192*(40+40)/(40+40+4)*1.0,1*1.25,0,90];
+rightTurnData = [3,12.192*(40+40)/(40+40+4)*1.0,1*1.25,0,90];
+zigzagTurnData = [3, 6.096*(40+40)/(40+40+4)*1.0, .75*1.25, 0, 90];
+zigzagTurnData1 = [2, 6.096*(40+40)/(40+40+4)*1.0, .75*1.25, 0, 90];
+disp("Should output "+times);
+for(i = 1:1:times)
     for(k=1:length(codeToExecute))
         code = codeToExecute(k);
         if(code==1)
