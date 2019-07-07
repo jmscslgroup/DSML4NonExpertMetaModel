@@ -1,0 +1,190 @@
+{
+  "pathModel": {
+    "name": "aPath",
+    "startX": "A",
+    "startY": 1,
+    "startDirection": "N",
+    "endX": "D",
+    "endY": 4,
+    "endDirection": "S",
+    "motion": [
+      {
+        "id": "/I/5",
+        "name": "Right",
+        "isStart": false,
+        "velocity": 1,
+        "Connections": [
+          {
+            "targetId": "/I/D",
+            "targetName": "Left_Signal"
+          }
+        ],
+        "Type": 3,
+        "RadOfCurvature": 10,
+        "Distance": 0,
+        "FinalTurnAngle": 90
+      },
+      {
+        "id": "/I/f",
+        "name": "ZigZagLeft",
+        "isStart": true,
+        "velocity": 1,
+        "Connections": [
+          {
+            "targetId": "/I/B",
+            "targetName": "ZigZagRight"
+          }
+        ],
+        "Type": 4,
+        "RadOfCurvature": 0,
+        "Distance": 0,
+        "FinalTurnAngle": 0
+      },
+      {
+        "id": "/I/B",
+        "name": "ZigZagRight",
+        "isStart": false,
+        "velocity": 1,
+        "Connections": [
+          {
+            "targetId": "/I/c",
+            "targetName": "Straight"
+          }
+        ],
+        "Type": 5,
+        "RadOfCurvature": 0,
+        "Distance": 0,
+        "FinalTurnAngle": 0
+      },
+      {
+        "id": "/I/c",
+        "name": "Straight",
+        "isStart": false,
+        "velocity": 1,
+        "Connections": [
+          {
+            "targetId": "/I/O",
+            "targetName": "Right_Signal"
+          }
+        ],
+        "Type": 1,
+        "RadOfCurvature": 0,
+        "Distance": 10,
+        "FinalTurnAngle": 0
+      },
+      {
+        "id": "/I/O",
+        "name": "Right_Signal",
+        "isStart": false,
+        "Connections": [
+          {
+            "targetId": "/I/5",
+            "targetName": "Right"
+          }
+        ],
+        "Type": 11
+      },
+      {
+        "id": "/I/D",
+        "name": "Left_Signal",
+        "isStart": false,
+        "Connections": [
+          {
+            "targetId": "/I/y",
+            "targetName": "Left"
+          }
+        ],
+        "Type": 10
+      },
+      {
+        "id": "/I/y",
+        "name": "Left",
+        "isStart": false,
+        "velocity": 1,
+        "Connections": [
+          {
+            "targetId": "/I/E",
+            "targetName": "Horn"
+          }
+        ],
+        "Type": 2,
+        "RadOfCurvature": 10,
+        "Distance": 0,
+        "FinalTurnAngle": 90
+      },
+      {
+        "id": "/I/E",
+        "name": "Horn",
+        "isStart": false,
+        "Connections": [
+          {
+            "targetId": "/I/l",
+            "targetName": "Hazard"
+          }
+        ],
+        "Type": 9
+      },
+      {
+        "id": "/I/l",
+        "name": "Hazard",
+        "isStart": false,
+        "Connections": [
+          {
+            "targetId": "/I/H",
+            "targetName": "For"
+          }
+        ],
+        "Type": 12
+      },
+      {
+        "id": "/I/H",
+        "name": "For",
+        "isStart": false,
+        "CodeToExecute": [
+          12
+        ],
+        "Connections": [
+          {
+            "targetId": "/I/G",
+            "targetName": "If"
+          }
+        ],
+        "Type": 6,
+        "Times": 5
+      },
+      {
+        "id": "/I/G",
+        "name": "If",
+        "isStart": false,
+        "CodeToExecute": [
+          9,
+          2,
+          10,
+          3
+        ],
+        "Connections": [
+          {
+            "targetId": "/I/P",
+            "targetName": "While"
+          }
+        ],
+        "Condition": 1,
+        "Type": 8
+      },
+      {
+        "id": "/I/P",
+        "name": "While",
+        "isStart": false,
+        "CodeToExecute": [
+          11,
+          1,
+          4,
+          5
+        ],
+        "Connections": [],
+        "Condition": 3,
+        "Type": 7
+      }
+    ]
+  }
+}
