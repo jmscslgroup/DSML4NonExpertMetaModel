@@ -8,27 +8,27 @@ if(condition==1)
         if(SafeLeft(senssub,abs(leftTurnData(2)) * 90*pi/180))
             for(k=1:length(codeToExecute))
         code = codeToExecute(k);
-        if(strcmp(code,"Straight"))
+        if(code==1)
             StraightController_NOGPS(velpub,velsub,sensorsub,straightData);
-        elseif(strcmp(code,"Left"))
+        elseif(code==2)
             TurnController_NOGPS(velpub,velsub,sensorsub,leftTurnData);
-        elseif(strcmp(code,"Right"))
+        elseif(code==3)
             TurnController_NOGPS(velpub,velsub,sensorsub,rightTurnData);
-        elseif(strcmp(code,"ZigZagLeft"))
+        elseif(code==4)
             TurnController_NOGPS(velpub,velsub,sensorsub,zigzagTurnData);
             TurnController_NOGPS(velpub,velsub,sensorsub,zigzagTurnData1);
-        elseif(strcmp(code,"ZigZagRight")) 
+        elseif(code==5) 
             TurnController_NOGPS(velpub,velsub,sensorsub,zigzagTurnData1);
             TurnController_NOGPS(velpub,velsub,sensorsub,zigzagTurnData);
-        elseif(strcmp(code,"Horn"))
+        elseif(code==9)
             Horn();
-        elseif(strcmp(code,"Left_Signal"))
+        elseif(code==10)
             LeftSignal();
-        elseif(strcmp(code,"Right_Signal")) 
+        elseif(code==11) 
             RightSignal();
-        elseif(strcmp(code,"Hazard"))  
+        elseif(code==12)  
             Hazard();
-            end
+                end
             end
         end
     elseif(condition==2)
@@ -62,25 +62,25 @@ if(condition==1)
             if(SafeRight(senssub,abs(rightTurnData(2)) * 90*pi/180))
                  for(k=1:length(codeToExecute))
         code = codeToExecute(k);
-        if(strcmp(code,"Straight"))
+       if(code==1)
             StraightController_NOGPS(velpub,velsub,sensorsub,straightData);
-        elseif(strcmp(code,"Left"))
+        elseif(code==2)
             TurnController_NOGPS(velpub,velsub,sensorsub,leftTurnData);
-        elseif(strcmp(code,"Right"))
+        elseif(code==3)
             TurnController_NOGPS(velpub,velsub,sensorsub,rightTurnData);
-        elseif(strcmp(code,"ZigZagLeft"))
+        elseif(code==4)
             TurnController_NOGPS(velpub,velsub,sensorsub,zigzagTurnData);
             TurnController_NOGPS(velpub,velsub,sensorsub,zigzagTurnData1);
-        elseif(strcmp(code,"ZigZagRight")) 
+        elseif(code==5) 
             TurnController_NOGPS(velpub,velsub,sensorsub,zigzagTurnData1);
             TurnController_NOGPS(velpub,velsub,sensorsub,zigzagTurnData);
-        elseif(strcmp(code,"Horn"))
+        elseif(code==9)
             Horn();
-        elseif(strcmp(code,"Left_Signal"))
+        elseif(code==10)
             LeftSignal();
-        elseif(strcmp(code,"Right_Signal")) 
+        elseif(code==11) 
             RightSignal();
-        elseif(strcmp(code,"Hazard"))  
+        elseif(code==12)  
             Hazard();
                 end
                  end
