@@ -98,7 +98,7 @@ for(i = 1:size(data,1)) %For each row in the path data matrix
             disp('For');
             path = data(i,4:length(data(i,:)));
             disp("The path is "+path);
-            For(vel_pub,pose_sub,sensor_sub,data(2),path);
+            For(vel_pub,pose_sub,sensor_sub,data(i,2),path);
         case WHILE
             disp('While');
             path = data(i,4:length(data(i,:)));
