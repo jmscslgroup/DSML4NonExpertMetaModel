@@ -1,0 +1,24 @@
+{
+  "pathModel": {
+    "name": "aPath",
+    "startX": "A",
+    "startY": 1,
+    "startDirection": "N",
+    "endX": "D",
+    "endY": 4,
+    "endDirection": "S",
+    "motion": [
+      {
+        "id": "/I/f",
+        "name": "For",
+        "isStart": true,
+        "CodeToExecute": [
+          12
+        ],
+        "Connections": [],
+        "Type": 6,
+        "Times": 10
+      }
+    ]
+  }
+}
