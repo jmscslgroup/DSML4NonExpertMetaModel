@@ -103,12 +103,12 @@ for(i = 1:size(data,1)) %For each row in the path data matrix
             disp('While');
             path = data(i,4:length(data(i,:)));
             disp("The path is "+path);
-            While(vel_pub,pose_sub,sensor_sub,data(3),path);
+            While(vel_pub,pose_sub,sensor_sub,data(i,3),path);
         case IF
             disp('If');
             path = data(i,4:length(data(i,:)));
             disp("The path is "+path);
-            If(vel_pub,pose_sub,sensor_sub,data(3),path);
+            If(vel_pub,pose_sub,sensor_sub,data(i,3),path);
         case HORN
             Horn();
         case LEFTSIGNAL
