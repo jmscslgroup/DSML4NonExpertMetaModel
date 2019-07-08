@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFile Version="1.0.2.10" xmlns="http://www.ni.com/SourceModel.xsd">
+    <Namespace Name="Project">
+        <VirtualInstrument IsTopLevel="false" IsReentrant="false" Version="1.0.2.0" OverridingModelDefinitionType="X3VIDocument" xmlns="http://www.ni.com/VirtualInstrument.xsd">
+            <FrontPanel>
+                <fpruntime:FrontPanelCanvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:fpruntime="clr-namespace:NationalInstruments.LabVIEW.FrontPanelRuntime;assembly=NationalInstruments.LabVIEW.FrontPanelRuntime" xmlns:Model="clr-namespace:NationalInstruments.SourceModel.Designer;assembly=NationalInstruments.SourceModel" x:Name="FrontPanel" Model:DesignerSurfaceProperties.CanSnapToObjects="True" Model:DesignerSurfaceProperties.SnapToObjects="True" Model:DesignerSurfaceProperties.ShowSnaplines="True" Model:DesignerSurfaceProperties.ShowControlAdorners="True" Width="640" Height="480" />
+            </FrontPanel>
+            <BlockDiagram Name="__RootDiagram__">
+				<StartBlock Id="n1" Bounds="42 34 70 91" Target="X3\.Lib:StartBlockTest">
+                    <ConfigurableMethodTerminal>
+                        <Terminal Id="Result" Direction="Output" DataType="Boolean" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                    </ConfigurableMethodTerminal>
+                    <Terminal Id="SequenceOut" Direction="Output" Wire="w6" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="52 33 18 18" />
+                </StartBlock>
+<%
+    addMotion = function(componentID,componentX,legoL,legoR, legoRot, wireID, isFinal, motionName) {
+%>                <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                    <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                        <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="<%=legoL%>">
+                        <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="<%=legoR%>">
+                        <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="<%=legoRot%>">
+                        <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="True">
+                        <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="0">
+                        <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                    </ConfigurableMethodTerminal>
+                    <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                    <%
+                    if( isFinal) {
+                    %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+                    } else {
+                    %>                    <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+                    }%>
+                </ConfigurableMethodCall>
+                <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                    <Content><%=motionName%></Content>
+                </Comment>
+                <%
+    }
+motion = {};
+componentX = 112;
+componentID = 2;
+wireID = 6;
+legoL = 50;
+legoR = 50;
+legoRot = 1;
+haveMotion = false;
+for (i = 0; i < pathModel.motion.length; i += 1) {
+	if(pathModel.motion[i].isStart) {
+		motion = pathModel.motion[i];
+		haveMotion = true;
+		break;
+	}
+}
+while(haveMotion) {
+//console.log('Have a motion: ' + JSON.stringify(motion, null, 4));
+//console.log(' - PrimitiveMotionConnections: ' + JSON.stringify(motion.PrimitiveMotionConnections, null, 4));
+
+	switch(motion.Type) {
+        case 1:	// Straight
+            legoL = 50;
+            legoR = 50;
+            legoRot = 1;
+            addMotion(componentID,componentX,legoL,legoR,legoRot,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+            break;
+        case 2:	// Left
+            legoL = 25;
+            legoR = 50;
+            legoRot = 2.22;
+            addMotion(componentID,componentX,legoL,legoR,legoRot,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+            break;
+		case 3:	// Right
+			legoL = 50;
+			legoR = 25;
+			legoRot = 2.22;
+            addMotion(componentID,componentX,legoL,legoR,legoRot,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+			break;
+        case 4:// ZigZagLeft
+            addMotion(componentID,componentX,0,40,1.028,wireID, false, motion.name);
+            componentX += 194;
+            componentID++;
+            wireID++;
+            addMotion(componentID,componentX,15,15,0.5,wireID, false, motion.name);
+            componentX += 194;
+            componentID++;
+            wireID++;
+            addMotion(componentID,componentX,40,0,1.028,wireID, false, motion.name);
+            componentX += 194;
+            componentID++;
+            wireID++;
+            addMotion(componentID,componentX,15,15,0.3,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+            break;
+        case 5:// ZigZagRight
+            addMotion(componentID,componentX,40,0,1.028,wireID, false, motion.name);
+            componentX += 194;
+            componentID++;
+            wireID++;
+            addMotion(componentID,componentX,15,15,0.5,wireID, false, motion.name);
+            componentX += 194;
+            componentID++;
+            wireID++;
+            addMotion(componentID,componentX,0,40,1.028,wireID, false, motion.name);
+            componentX += 194;
+            componentID++;
+            wireID++;
+            addMotion(componentID,componentX,15,15,0.3,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+            break;
+	}
+
+
+
+
+
+	haveMotion = false;
+	if( motion.PrimitiveMotionConnections.length != 0) {
+	//	console.log('There exists an outgoing connection');
+		for (i = 0; i < pathModel.motion.length; i += 1) {
+			if(pathModel.motion[i].id === motion.PrimitiveMotionConnections[0].targetId) {
+				haveMotion = true;
+				motion = pathModel.motion[i];
+				break;
+			}
+		}
+	}
+
+	componentX += 194;
+	componentID++;
+	wireID++;
+
+}%>
+</BlockDiagram>
+            <Icon>
+                <Model0:IconPanel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Model0="clr-namespace:NationalInstruments.LabVIEW.VI.Design;assembly=NationalInstruments.LabVIEW.VI.SourceModel" xmlns:fpruntime="clr-namespace:NationalInstruments.LabVIEW.FrontPanelRuntime;assembly=NationalInstruments.LabVIEW.FrontPanelRuntime" Height="56" Width="56" Background="#FFE0E0E0">
+                    <fpruntime:AnimationProperties.Animations>
+                        <fpruntime:AnimationsContainer />
+                    </fpruntime:AnimationProperties.Animations>
+                    <fpruntime:EventProperties.Events>
+                        <fpruntime:EventContainer />
+                    </fpruntime:EventProperties.Events>
+                </Model0:IconPanel>
+            </Icon>
+        </VirtualInstrument>
+    </Namespace>
+</SourceFile>
