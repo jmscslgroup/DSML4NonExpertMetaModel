@@ -920,250 +920,246 @@ function getNextChild(connection)
         }
         return -999;
     };
-//Path verification took most out kept what I needed to compile
+
     canyonviewGenerator.prototype.modelCheck = function (dModel) {
-        var self = this,
-            motion = {},
-            dataModel = dModel,
-            pathModel = dModel.pathModel,
-            haveMotion = false,
-            deferred = new Q.defer(),
-            i,
-            gridSize = 4,
-            minNumberOfMoves = 6,
-            maxNumberOfMoves = 100,
-            count = 1,
-            currentX,
-            currentY,
-            expectedX,
-            expectedY,
-            currentDirection = pathModel.startDirection;
-            deferred.resolve(dataModel);
+            var self = this,
+                motion = {},
+                dataModel = dModel,
+                pathModel = dModel.pathModel,
+                haveMotion = false,
+                deferred = new Q.defer(),
+                i,
+                gridSize = 4,
+                minNumberOfMoves = 6,
+                maxNumberOfMoves = 100,
+                count = 1,
+                currentX,
+                currentY,
+                expectedX,
+                expectedY,
+                currentDirection = pathModel.startDirection;
 
-            return deferred.promise;
-          }
-/**
-        self.logger.info('In modelCheck()');
-        // Convert the calues to what the class expects:
-        currentX = self.letterToNumber(pathModel.startX);
-        if(currentX < 0) {
-            deferred.reject(new Error('Unknown startX = ' + pathModel.startX));
-            return deferred.promise;
-        }
-        currentY = gridSize - pathModel.startY;
-        expectedX = self.letterToNumber(pathModel.endX);
-        if(currentX < 0) {
-            deferred.reject(new Error('Unknown endX = ' + pathModel.endX));
-            return deferred.promise;
-        }
-        expectedY = gridSize - pathModel.endY;
-
-        for (i = 0; i < pathModel.motion.length; i += 1) {
-            if(pathModel.motion[i].isStart) {
-                motion = pathModel.motion[i];
-                haveMotion = true;
-                break;
-            }
-        }
-
-        while(haveMotion) {
-            //console.log('Have a motion: ' + JSON.stringify(motion, null, 4));
-            //console.log(' - PrimitiveMotionConnections: ' + JSON.stringify(motion.PrimitiveMotionConnections, null, 4));
-            var priorPosition = '(' + currentX + ',' + currentY + ') : ' + currentDirection
-            switch(motion.Type) {
-                case 1:	// Straight
-                    //currentDirection = currentDirection;	// won't change
-                    switch(currentDirection) {
-                        case "E":
-                            currentX += 1;
-                            break;
-                        case "W":
-                            currentX -= 1;
-                            break;
-                        case "N":
-                            currentY += 1;
-                            break;
-                        case "S":
-                            currentY -= 1;
-                            break;
-                        default:
-                            deferred.reject(new Error('Unknown direction!'));
-                            return deferred.promise;
-                    }
-                    break;
-                case 2:	// Left
-                    switch(currentDirection) {
-                        case "E":
-                            currentX += 1;
-                            currentY += 1;
-                            currentDirection = "N";
-                            break;
-                        case "W":
-                            currentX -= 1;
-                            currentY -= 1;
-                            currentDirection = "S";
-                            break;
-                        case "N":
-                            currentX -= 1;
-                            currentY += 1;
-                            currentDirection = "W";
-                            break;
-                        case "S":
-                            currentX += 1;
-                            currentY -= 1;
-                            currentDirection = "E";
-                            break;
-                        default:
-                            deferred.reject(new Error('Unknown direction!'));
-                            return deferred.promise;
-                    }
-                    break;
-                case 3:	// Right
-                    switch(currentDirection) {
-                        case "E":
-                            currentX += 1;
-                            currentY -= 1;
-                            currentDirection = "S";
-                            break;
-                        case "W":
-                            currentX -= 1;
-                            currentY += 1;
-                            currentDirection = "N";
-                            break;
-                        case "N":
-                            currentX += 1;
-                            currentY += 1;
-                            currentDirection = "E";
-                            break;
-                        case "S":
-                            currentX -= 1;
-                            currentY -= 1;
-                            currentDirection = "W";
-                            break;
-                        default:
-                            deferred.reject(new Error('Unknown direction!'));
-                            return deferred.promise;
-                    }
-                    break;
-                case 4:	// ZigZagLeft
-                    switch(currentDirection) {
-                        case "E":
-                            currentX += 1;
-                            currentY += 1;
-                            break;
-                        case "W":
-                            currentX -= 1;
-                            currentY -= 1;
-                            break;
-                        case "N":
-                            currentX -= 1;
-                            currentY += 1;
-                            break;
-                        case "S":
-                            currentX += 1;
-                            currentY -= 1;
-                            break;
-                        default:
-                            deferred.reject(new Error('Unknown direction!'));
-                            return deferred.promise;
-                    }
-                    break;
-                case 5:	// ZigZagRight
-                    switch(currentDirection) {
-                        case "E":
-                            currentX += 1;
-                            currentY -= 1;
-                            break;
-                        case "W":
-                            currentX -= 1;
-                            currentY += 1;
-                            break;
-                        case "N":
-                            currentX += 1;
-                            currentY += 1;
-                            break;
-                        case "S":
-                            currentX -= 1;
-                            currentY -= 1;
-                            break;
-                        default:
-                            deferred.reject(new Error('Unknown direction!'));
-                            return deferred.promise;
-                    }
-                    break;
-                default:
-                    deferred.reject(new Error('Unknown motion!'));
-                    return deferred.promise;
-            }
-
-            console.log( priorPosition + ' [' + motion.Type + ']-> (' + currentX + ',' + currentY + ') : ' + currentDirection);
-
+            self.logger.info('In modelCheck()');
+            // Convert the calues to what the class expects:
+            currentX = self.letterToNumber(pathModel.startX);
             if(currentX < 0) {
-                deferred.reject(new Error('Out of bounds on motion #' + count + ', too far West!'));
-                return deferred.promise;
-            } else if(currentX > gridSize-1) {
-                deferred.reject(new Error('Out of bounds on motion #' + count + ', too far East!'));
+                deferred.reject(new Error('Unknown startX = ' + pathModel.startX));
                 return deferred.promise;
             }
-            if(currentY < 0) {
-                deferred.reject(new Error('Out of bounds on motion #' + count + ', too far South!'));
-                return deferred.promise;
-            } else if(currentY > gridSize-1) {
-                deferred.reject(new Error('Out of bounds on motion #' + count + ', too far North!'));
+            currentY = gridSize - pathModel.startY;
+            expectedX = self.letterToNumber(pathModel.endX);
+            if(currentX < 0) {
+                deferred.reject(new Error('Unknown endX = ' + pathModel.endX));
                 return deferred.promise;
             }
-	console.log('currentX = ' + currentX + '  obstacleX: ' + self.letterToNumber(pathModel.obstacleX));
-	console.log('currentY = ' + currentY + '  obstacleY: ' + (gridSize-pathModel.obstacleY));
-		if( currentX == self.letterToNumber(pathModel.obstacleX) && currentY == (gridSize-pathModel.obstacleY)) {
-                deferred.reject(new Error('Ran into an obstacle on motion #' + count ));
-                return deferred.promise;
+            expectedY = gridSize - pathModel.endY;
 
-	}
+            for (i = 0; i < pathModel.motion.length; i += 1) {
+                if(pathModel.motion[i].isStart) {
+                    motion = pathModel.motion[i];
+                    haveMotion = true;
+                    break;
+                }
+            }
 
-            haveMotion = false;
-            count += 1;
-            if( motion.PrimitiveMotionConnections.length != 0) {
-                console.log('There exists an outgoing connection');
-
-                for (i = 0; i < pathModel.motion.length; i += 1) {
-                    if(pathModel.motion[i].id === motion.PrimitiveMotionConnections[0].targetId) {
-                        haveMotion = true;
-                        motion = pathModel.motion[i];
+            while(haveMotion) {
+                //console.log('Have a motion: ' + JSON.stringify(motion, null, 4));
+                //console.log(' - PrimitiveMotionConnections: ' + JSON.stringify(motion.PrimitiveMotionConnections, null, 4));
+                var priorPosition = '(' + currentX + ',' + currentY + ') : ' + currentDirection
+                switch(motion.Type) {
+                    case 1:	// Straight
+                        //currentDirection = currentDirection;	// won't change
+                        switch(currentDirection) {
+                            case "E":
+                                currentX += 1;
+                                break;
+                            case "W":
+                                currentX -= 1;
+                                break;
+                            case "N":
+                                currentY += 1;
+                                break;
+                            case "S":
+                                currentY -= 1;
+                                break;
+                            default:
+                                deferred.reject(new Error('Unknown direction!'));
+                                return deferred.promise;
+                        }
                         break;
+                    case 2:	// Left
+                        switch(currentDirection) {
+                            case "E":
+                                currentX += 1;
+                                currentY += 1;
+                                currentDirection = "N";
+                                break;
+                            case "W":
+                                currentX -= 1;
+                                currentY -= 1;
+                                currentDirection = "S";
+                                break;
+                            case "N":
+                                currentX -= 1;
+                                currentY += 1;
+                                currentDirection = "W";
+                                break;
+                            case "S":
+                                currentX += 1;
+                                currentY -= 1;
+                                currentDirection = "E";
+                                break;
+                            default:
+                                deferred.reject(new Error('Unknown direction!'));
+                                return deferred.promise;
+                        }
+                        break;
+                    case 3:	// Right
+                        switch(currentDirection) {
+                            case "E":
+                                currentX += 1;
+                                currentY -= 1;
+                                currentDirection = "S";
+                                break;
+                            case "W":
+                                currentX -= 1;
+                                currentY += 1;
+                                currentDirection = "N";
+                                break;
+                            case "N":
+                                currentX += 1;
+                                currentY += 1;
+                                currentDirection = "E";
+                                break;
+                            case "S":
+                                currentX -= 1;
+                                currentY -= 1;
+                                currentDirection = "W";
+                                break;
+                            default:
+                                deferred.reject(new Error('Unknown direction!'));
+                                return deferred.promise;
+                        }
+                        break;
+                    case 4:	// ZigZagLeft
+                        switch(currentDirection) {
+                            case "E":
+                                currentX += 1;
+                                currentY += 1;
+                                break;
+                            case "W":
+                                currentX -= 1;
+                                currentY -= 1;
+                                break;
+                            case "N":
+                                currentX -= 1;
+                                currentY += 1;
+                                break;
+                            case "S":
+                                currentX += 1;
+                                currentY -= 1;
+                                break;
+                            default:
+                                deferred.reject(new Error('Unknown direction!'));
+                                return deferred.promise;
+                        }
+                        break;
+                    case 5:	// ZigZagRight
+                        switch(currentDirection) {
+                            case "E":
+                                currentX += 1;
+                                currentY -= 1;
+                                break;
+                            case "W":
+                                currentX -= 1;
+                                currentY += 1;
+                                break;
+                            case "N":
+                                currentX += 1;
+                                currentY += 1;
+                                break;
+                            case "S":
+                                currentX -= 1;
+                                currentY -= 1;
+                                break;
+                            default:
+                                deferred.reject(new Error('Unknown direction!'));
+                                return deferred.promise;
+                        }
+                        break;
+                    default:
+                        deferred.reject(new Error('Unknown motion!'));
+                        return deferred.promise;
+                }
+
+                console.log( priorPosition + ' [' + motion.Type + ']-> (' + currentX + ',' + currentY + ') : ' + currentDirection);
+
+                if(currentX < 0) {
+                    deferred.reject(new Error('Out of bounds on motion #' + count + ', too far West!'));
+                    return deferred.promise;
+                } else if(currentX > gridSize-1) {
+                    deferred.reject(new Error('Out of bounds on motion #' + count + ', too far East!'));
+                    return deferred.promise;
+                }
+                if(currentY < 0) {
+                    deferred.reject(new Error('Out of bounds on motion #' + count + ', too far South!'));
+                    return deferred.promise;
+                } else if(currentY > gridSize-1) {
+                    deferred.reject(new Error('Out of bounds on motion #' + count + ', too far North!'));
+                    return deferred.promise;
+                }
+    	console.log('currentX = ' + currentX + '  obstacleX: ' + self.letterToNumber(pathModel.obstacleX));
+    	console.log('currentY = ' + currentY + '  obstacleY: ' + (gridSize-pathModel.obstacleY));
+    		if( currentX == self.letterToNumber(pathModel.obstacleX) && currentY == (gridSize-pathModel.obstacleY)) {
+                    deferred.reject(new Error('Ran into an obstacle on motion #' + count ));
+                    return deferred.promise;
+
+    	}
+
+                haveMotion = false;
+                count += 1;
+                if( motion.Connections.length != 0) {
+                    console.log('There exists an outgoing connection');
+
+                    for (i = 0; i < pathModel.motion.length; i += 1) {
+                        if(pathModel.motion[i].id === motion.Connections[0].targetId) {
+                            haveMotion = true;
+                            motion = pathModel.motion[i];
+                            break;
+                        }
                     }
                 }
             }
-        }
 
-	if( count-1 < minNumberOfMoves ) {
-		deferred.reject(new Error('Not enough moves!  you more than ' + minNumberOfMoves + ' moves, you have ' + (count-1) + ' moves.'));
+    	if( count-1 < minNumberOfMoves ) {
+    		deferred.reject(new Error('Not enough moves!  you more than ' + minNumberOfMoves + ' moves, you have ' + (count-1) + ' moves.'));
+                    return deferred.promise;
+
+    	}
+    	if( count-1 > maxNumberOfMoves ) {
+    		deferred.reject(new Error('Too many moves!  you less than ' + maxNumberOfMoves + ' moves, you have ' + (count-1) + ' moves.'));
+                    return deferred.promise;
+
+    	}
+
+
+            if(expectedX != currentX ||
+                expectedY != currentY ||
+                pathModel.endDirection !== currentDirection) {
+                var errorString = 'Expected end at: ' + self.numberToLetter(expectedX) + (gridSize - expectedY) + ' facing ' + pathModel.endDirection;
+                errorString += ', Actually ended at: ' + self.numberToLetter(currentX) + (gridSize - currentY) + ' facing ' + currentDirection;
+                errorString += ', The start is: ' + pathModel.startX + pathModel.startY + ' facing ' + pathModel.startDirection;
+
+                console.log('Model check Failed');
+                deferred.reject(new Error('The end was not reached from the start! ' + errorString));
                 return deferred.promise;
+            }
 
-	}
-	if( count-1 > maxNumberOfMoves ) {
-		deferred.reject(new Error('Too many moves!  you less than ' + maxNumberOfMoves + ' moves, you have ' + (count-1) + ' moves.'));
-                return deferred.promise;
+            deferred.resolve(dataModel);
 
-	}
-
-
-        if(expectedX != currentX ||
-            expectedY != currentY ||
-            pathModel.endDirection !== currentDirection) {
-            var errorString = 'Expected end at: ' + self.numberToLetter(expectedX) + (gridSize - expectedY) + ' facing ' + pathModel.endDirection;
-            errorString += ', Actually ended at: ' + self.numberToLetter(currentX) + (gridSize - currentY) + ' facing ' + currentDirection;
-            errorString += ', The start is: ' + pathModel.startX + pathModel.startY + ' facing ' + pathModel.startDirection;
-
-            console.log('Model check Failed');
-            deferred.reject(new Error('The end was not reached from the start! ' + errorString));
             return deferred.promise;
-        }
+        };
 
-        deferred.resolve(dataModel);
-
-        return deferred.promise;
-    };
-**/
     /**
      * Main function for the plugin to execute. This will perform the execution.
      * Notes:
