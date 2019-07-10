@@ -612,11 +612,11 @@ define([
                         ]
                     }
                 };
-
+//Debugging statements
             self.logger.info('In extractDataModel()');
             dataModel.pathModel.name = self.core.getAttribute(path, 'name');
             self.logger.info('- extractDataModel() : Path name = ' + dataModel.pathModel.name);
-
+//Load all blocks of the path
             self.core.loadChildren(path, function (err, children) {
                 console.log('self.core.loadChildren(pathNode, function (err, children) {}');
                 if (err) {
@@ -627,7 +627,7 @@ define([
                 var primitivePromises = [],
                     i,
                     metaType;
-    //Loads all of the blocks who are children of the path
+    //Loops through all of the blocks who are children of the path and calls method to build path
     self.logger.info("Length of children of path: "+children.length);
                 for (i = 0; i < children.length; i += 1) {
                     //metaType = self.core.getAttribute(self.getMetaType(children[i]), 'name');
@@ -683,6 +683,7 @@ define([
             //     })
             //     .nodeify(callback);
         }
+        //Changes grid system so can compare in modelCheck
     CATVehicleContinuousVerifier.prototype.letterToNumber = function (theLetter) {
         switch(theLetter) {
             case "A":
@@ -698,7 +699,7 @@ define([
         }
         return -999;
     };
-
+//Constraint based verification of the path built checks boundaries and a singular obstacle
     CATVehicleContinuousVerifier.prototype.modelCheck = function (dModel) {
         var self = this,
             motion = {},
@@ -1085,6 +1086,10 @@ define([
                       {
                         if(motion.CodeToExecute[j]===1)
                         {
+                          if(motion.condNum===1||motion.condNum===3)
+                          {
+                            self.logger.warn("Straight might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1105,6 +1110,10 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===2)
                         {
+                          if(motion.condNum===2||motion.condNum===3)
+                          {
+                            self.logger.warn("Left might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1133,6 +1142,10 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===3)
                         {
+                          if(motion.condNum===2||motion.condNum===1)
+                          {
+                            self.logger.warn("Right might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1161,6 +1174,10 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===4)
                         {
+                          if(motion.condNum===2||motion.condNum===3)
+                          {
+                            self.logger.warn("ZigZagLeft might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1185,6 +1202,10 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===5)
                         {
+                          if(motion.condNum===2||motion.condNum===1)
+                          {
+                            self.logger.warn("ZigZagRight might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1371,6 +1392,10 @@ define([
                       {
                         if(motion.CodeToExecute[j]===1)
                         {
+                          if(motion.condNum===1||motion.condNum===3)
+                          {
+                            self.logger.warn("Straight might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1391,6 +1416,10 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===2)
                         {
+                          if(motion.condNum===2||motion.condNum===3)
+                          {
+                            self.logger.warn("Left might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1419,6 +1448,10 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===3)
                         {
+                          if(motion.condNum===2||motion.condNum===1)
+                          {
+                            self.logger.warn("Right might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1447,6 +1480,10 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===4)
                         {
+                          if(motion.condNum===2||motion.condNum===3)
+                          {
+                            self.logger.warn("ZigZagLeft might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1471,6 +1508,10 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===5)
                         {
+                          if(motion.condNum===2||motion.condNum===1)
+                          {
+                            self.logger.warn("ZigZagRight might not be safe");
+                          }
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1501,9 +1542,9 @@ define([
                     deferred.reject(new Error('Unknown motion!'));
                     return deferred.promise;
             }
-
+//Logs current position on grid
             console.log( priorPosition + ' [' + motion.Type + ']-> (' + currentX + ',' + currentY + ') : ' + currentDirection);
-
+//Checks if out of bounds or at obstacle
             if(currentX < 0) {
                 deferred.reject(new Error('Out of bounds on motion #' + count + ', too far West!'));
                 return deferred.promise;
@@ -1604,9 +1645,12 @@ define([
   // We have an array of the children and can get information from them.
   var i;
   for (i = 0; i < children.length; i += 1) {
+    //Updates checked only if the aPath is changed
     if(self.core.getAttribute(children[i],'name')==='aPath')
     {
+      //debugging
   self.logger.info("Child path is "+self.core.getAttribute(children[i], 'name'));
+  //Ensures async not a factor
   self.extractDataModel(children[i])
       .then(function (dataModel) {
           //self.logger.info(JSON.stringify(dataModel, null, 4));
@@ -1626,6 +1670,7 @@ define([
 }
 }
 });
+//Ensures method called after every update in path
 callback(null, this.updateResult);
 }
     /**
