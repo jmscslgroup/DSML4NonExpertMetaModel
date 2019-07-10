@@ -1007,7 +1007,7 @@ define([
                     {
                       var tempX = currentX;
                       var tempY = currentY;
-                      if(motion.condNum===1)
+                      if(motion.Condition===1)
                       {
                         switch(currentDirection) {
                             case "E":
@@ -1031,7 +1031,7 @@ define([
                                 return deferred.promise;
                         }
                       }
-                      else if(motion.condNum===2)
+                      else if(motion.Condition===2)
                       {
                         switch(currentDirection) {
                             case "E":
@@ -1051,7 +1051,7 @@ define([
                                 return deferred.promise;
                         }
                       }
-                      else if(motion.condNum===3)
+                      else if(motion.Condition===3)
                       {
                         switch(currentDirection) {
                             case "E":
@@ -1086,7 +1086,7 @@ define([
                       {
                         if(motion.CodeToExecute[j]===1)
                         {
-                          if(motion.condNum===1||motion.condNum===3)
+                          if(motion.Condition===1||motion.Condition===3)
                           {
                             self.logger.warn("Straight might not be safe");
                           }
@@ -1110,7 +1110,7 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===2)
                         {
-                          if(motion.condNum===2||motion.condNum===3)
+                          if(motion.Condition===2||motion.Condition===3)
                           {
                             self.logger.warn("Left might not be safe");
                           }
@@ -1142,7 +1142,7 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===3)
                         {
-                          if(motion.condNum===2||motion.condNum===1)
+                          if(motion.Condition===2||motion.Condition===1)
                           {
                             self.logger.warn("Right might not be safe");
                           }
@@ -1174,7 +1174,7 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===4)
                         {
-                          if(motion.condNum===2||motion.condNum===3)
+                          if(motion.Condition===2||motion.Condition===3)
                           {
                             self.logger.warn("ZigZagLeft might not be safe");
                           }
@@ -1202,7 +1202,7 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===5)
                         {
-                          if(motion.condNum===2||motion.condNum===1)
+                          if(motion.Condition===2||motion.Condition===1)
                           {
                             self.logger.warn("ZigZagRight might not be safe");
                           }
@@ -1231,7 +1231,7 @@ define([
                     }
                     tempX = currentX;
                     tempY = currentY;
-                    if(motion.condNum===1)
+                    if(motion.Condition===1)
                     {
                       switch(currentDirection) {
                           case "E":
@@ -1255,7 +1255,7 @@ define([
                               return deferred.promise;
                       }
                     }
-                    else if(motion.condNum===2)
+                    else if(motion.Condition===2)
                     {
                       switch(currentDirection) {
                           case "E":
@@ -1275,7 +1275,7 @@ define([
                               return deferred.promise;
                       }
                     }
-                    else if(motion.condNum===3)
+                    else if(motion.Condition===3)
                     {
                       switch(currentDirection) {
                           case "E":
@@ -1310,7 +1310,7 @@ define([
                     {
                       var tempX = currentX;
                       var tempY = currentY;
-                      if(motion.condNum===1)
+                      if(motion.Condition===1)
                       {
                         switch(currentDirection) {
                             case "E":
@@ -1334,7 +1334,7 @@ define([
                                 return deferred.promise;
                         }
                       }
-                      else if(motion.condNum===2)
+                      else if(motion.Condition===2)
                       {
                         switch(currentDirection) {
                             case "E":
@@ -1354,7 +1354,7 @@ define([
                                 return deferred.promise;
                         }
                       }
-                      else if(motion.condNum===3)
+                      else if(motion.Condition===3)
                       {
                         switch(currentDirection) {
                             case "E":
@@ -1392,7 +1392,7 @@ define([
                       {
                         if(motion.CodeToExecute[j]===1)
                         {
-                          if(motion.condNum===1||motion.condNum===3)
+                          if(motion.Condition===1||motion.Condition===3)
                           {
                             self.logger.warn("Straight might not be safe");
                           }
@@ -1416,7 +1416,7 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===2)
                         {
-                          if(motion.condNum===2||motion.condNum===3)
+                          if(motion.Condition===2||motion.Condition===3)
                           {
                             self.logger.warn("Left might not be safe");
                           }
@@ -1448,7 +1448,7 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===3)
                         {
-                          if(motion.condNum===2||motion.condNum===1)
+                          if(motion.Condition===2||motion.Condition===1)
                           {
                             self.logger.warn("Right might not be safe");
                           }
@@ -1480,7 +1480,7 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===4)
                         {
-                          if(motion.condNum===2||motion.condNum===3)
+                          if(motion.Condition===2||motion.Condition===3)
                           {
                             self.logger.warn("ZigZagLeft might not be safe");
                           }
@@ -1508,7 +1508,7 @@ define([
                         }
                         else if(motion.CodeToExecute[j]===5)
                         {
-                          if(motion.condNum===2||motion.condNum===1)
+                          if(motion.Condition===2||motion.Condition===1)
                           {
                             self.logger.warn("ZigZagRight might not be safe");
                           }
