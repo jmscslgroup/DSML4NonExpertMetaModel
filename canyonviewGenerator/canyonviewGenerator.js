@@ -1087,6 +1087,677 @@ function getNextChild(connection)
                                 return deferred.promise;
                         }
                         break;
+                        case 6://For loop
+                        {
+                          var iter = motion.Times;
+                          var i;
+                          for(i=0;i<iter;i+=1)
+                          {
+                            var j;
+                            for(j = 0; j<motion.CodeToExecute.length;j+=1)
+                            {
+                              if(motion.CodeToExecute[j]===1)
+                              {
+                                switch(currentDirection) {
+                                    case "E":
+                                        currentX += 1;
+                                        break;
+                                    case "W":
+                                        currentX -= 1;
+                                        break;
+                                    case "N":
+                                        currentY += 1;
+                                        break;
+                                    case "S":
+                                        currentY -= 1;
+                                        break;
+                                    default:
+                                        deferred.reject(new Error('Unknown direction!'));
+                                        return deferred.promise;
+                                }
+                              }
+                              else if(motion.CodeToExecute[j]===2)
+                              {
+                                switch(currentDirection) {
+                                    case "E":
+                                        currentX += 1;
+                                        currentY += 1;
+                                        currentDirection = "N";
+                                        break;
+                                    case "W":
+                                        currentX -= 1;
+                                        currentY -= 1;
+                                        currentDirection = "S";
+                                        break;
+                                    case "N":
+                                        currentX -= 1;
+                                        currentY += 1;
+                                        currentDirection = "W";
+                                        break;
+                                    case "S":
+                                        currentX += 1;
+                                        currentY -= 1;
+                                        currentDirection = "E";
+                                        break;
+                                    default:
+                                        deferred.reject(new Error('Unknown direction!'));
+                                        return deferred.promise;
+                                }
+                              }
+                              else if(motion.CodeToExecute[j]===3)
+                              {
+                                switch(currentDirection) {
+                                    case "E":
+                                        currentX += 1;
+                                        currentY -= 1;
+                                        currentDirection = "S";
+                                        break;
+                                    case "W":
+                                        currentX -= 1;
+                                        currentY += 1;
+                                        currentDirection = "N";
+                                        break;
+                                    case "N":
+                                        currentX += 1;
+                                        currentY += 1;
+                                        currentDirection = "E";
+                                        break;
+                                    case "S":
+                                        currentX -= 1;
+                                        currentY -= 1;
+                                        currentDirection = "W";
+                                        break;
+                                    default:
+                                        deferred.reject(new Error('Unknown direction!'));
+                                        return deferred.promise;
+                                }
+                              }
+                              else if(motion.CodeToExecute[j]===4)
+                              {
+                                switch(currentDirection) {
+                                    case "E":
+                                        currentX += 1;
+                                        currentY += 1;
+                                        break;
+                                    case "W":
+                                        currentX -= 1;
+                                        currentY -= 1;
+                                        break;
+                                    case "N":
+                                        currentX -= 1;
+                                        currentY += 1;
+                                        break;
+                                    case "S":
+                                        currentX += 1;
+                                        currentY -= 1;
+                                        break;
+                                    default:
+                                        deferred.reject(new Error('Unknown direction!'));
+                                        return deferred.promise;
+                                }
+                              }
+                              else if(motion.CodeToExecute[j]===5)
+                              {
+                                switch(currentDirection) {
+                                    case "E":
+                                        currentX += 1;
+                                        currentY -= 1;
+                                        break;
+                                    case "W":
+                                        currentX -= 1;
+                                        currentY += 1;
+                                        break;
+                                    case "N":
+                                        currentX += 1;
+                                        currentY += 1;
+                                        break;
+                                    case "S":
+                                        currentX -= 1;
+                                        currentY -= 1;
+                                        break;
+                                    default:
+                                        deferred.reject(new Error('Unknown direction!'));
+                                        return deferred.promise;
+                                }
+                              }
+                            }
+                          }
+                        }
+                        break;
+                        case 7://while loop
+                        {
+                          var tempX = currentX;
+                          var tempY = currentY;
+                          if(motion.Condition===1)
+                          {
+                            switch(currentDirection) {
+                                case "E":
+                                    tempX += 1;
+                                    tempY += 1;
+                                    break;
+                                case "W":
+                                    tempX -= 1;
+                                    tempY -= 1;
+                                    break;
+                                case "N":
+                                    tempX -= 1;
+                                    tempY += 1;
+                                    break;
+                                case "S":
+                                    tempX += 1;
+                                    tempY -= 1;
+                                    break;
+                                default:
+                                    deferred.reject(new Error('Unknown direction!'));
+                                    return deferred.promise;
+                            }
+                          }
+                          else if(motion.Condition===2)
+                          {
+                            switch(currentDirection) {
+                                case "E":
+                                    tempX += 1;
+                                    break;
+                                case "W":
+                                    tempX -= 1;
+                                    break;
+                                case "N":
+                                    tempY += 1;
+                                    break;
+                                case "S":
+                                    tempY -= 1;
+                                    break;
+                                default:
+                                    deferred.reject(new Error('Unknown direction!'));
+                                    return deferred.promise;
+                            }
+                          }
+                          else if(motion.Condition===3)
+                          {
+                            switch(currentDirection) {
+                                case "E":
+                                    tempX += 1;
+                                    tempY -= 1;
+
+                                    break;
+                                case "W":
+                                    tempX -= 1;
+                                    tempY += 1;
+
+                                    break;
+                                case "N":
+                                    tempX += 1;
+                                    tempY += 1;
+
+                                    break;
+                                case "S":
+                                    tempX -= 1;
+                                    tempY -= 1;
+                                    break;
+                                default:
+                                    deferred.reject(new Error('Unknown direction!'));
+                                    return deferred.promise;
+                            }
+                          }
+
+                          while((tempX != self.letterToNumber(pathModel.obstacleX) && tempY != (gridSize-pathModel.obstacleY))&&currentX>=0&&currentY>=0&&currentX <= gridSize-1&&currentY <= gridSize-1) {
+                          self.logger.info("While returned true");
+                          for(j = 0; j<motion.CodeToExecute.length;j+=1)
+                          {
+                            if(motion.CodeToExecute[j]===1)
+                            {
+                              if(motion.Condition===1||motion.Condition===3)
+                              {
+                                self.logger.warn("Straight might not be safe");
+                              }
+                              switch(currentDirection) {
+                                  case "E":
+                                      currentX += 1;
+                                      break;
+                                  case "W":
+                                      currentX -= 1;
+                                      break;
+                                  case "N":
+                                      currentY += 1;
+                                      break;
+                                  case "S":
+                                      currentY -= 1;
+                                      break;
+                                  default:
+                                      deferred.reject(new Error('Unknown direction!'));
+                                      return deferred.promise;
+                              }
+                            }
+                            else if(motion.CodeToExecute[j]===2)
+                            {
+                              if(motion.Condition===2||motion.Condition===3)
+                              {
+                                self.logger.warn("Left might not be safe");
+                              }
+                              switch(currentDirection) {
+                                  case "E":
+                                      currentX += 1;
+                                      currentY += 1;
+                                      currentDirection = "N";
+                                      break;
+                                  case "W":
+                                      currentX -= 1;
+                                      currentY -= 1;
+                                      currentDirection = "S";
+                                      break;
+                                  case "N":
+                                      currentX -= 1;
+                                      currentY += 1;
+                                      currentDirection = "W";
+                                      break;
+                                  case "S":
+                                      currentX += 1;
+                                      currentY -= 1;
+                                      currentDirection = "E";
+                                      break;
+                                  default:
+                                      deferred.reject(new Error('Unknown direction!'));
+                                      return deferred.promise;
+                              }
+                            }
+                            else if(motion.CodeToExecute[j]===3)
+                            {
+                              if(motion.Condition===2||motion.Condition===1)
+                              {
+                                self.logger.warn("Right might not be safe");
+                              }
+                              switch(currentDirection) {
+                                  case "E":
+                                      currentX += 1;
+                                      currentY -= 1;
+                                      currentDirection = "S";
+                                      break;
+                                  case "W":
+                                      currentX -= 1;
+                                      currentY += 1;
+                                      currentDirection = "N";
+                                      break;
+                                  case "N":
+                                      currentX += 1;
+                                      currentY += 1;
+                                      currentDirection = "E";
+                                      break;
+                                  case "S":
+                                      currentX -= 1;
+                                      currentY -= 1;
+                                      currentDirection = "W";
+                                      break;
+                                  default:
+                                      deferred.reject(new Error('Unknown direction!'));
+                                      return deferred.promise;
+                              }
+                            }
+                            else if(motion.CodeToExecute[j]===4)
+                            {
+                              if(motion.Condition===2||motion.Condition===3)
+                              {
+                                self.logger.warn("ZigZagLeft might not be safe");
+                              }
+                              switch(currentDirection) {
+                                  case "E":
+                                      currentX += 1;
+                                      currentY += 1;
+                                      break;
+                                  case "W":
+                                      currentX -= 1;
+                                      currentY -= 1;
+                                      break;
+                                  case "N":
+                                      currentX -= 1;
+                                      currentY += 1;
+                                      break;
+                                  case "S":
+                                      currentX += 1;
+                                      currentY -= 1;
+                                      break;
+                                  default:
+                                      deferred.reject(new Error('Unknown direction!'));
+                                      return deferred.promise;
+                              }
+                            }
+                            else if(motion.CodeToExecute[j]===5)
+                            {
+                              if(motion.Condition===2||motion.Condition===1)
+                              {
+                                self.logger.warn("ZigZagRight might not be safe");
+                              }
+                              switch(currentDirection) {
+                                  case "E":
+                                      currentX += 1;
+                                      currentY -= 1;
+                                      break;
+                                  case "W":
+                                      currentX -= 1;
+                                      currentY += 1;
+                                      break;
+                                  case "N":
+                                      currentX += 1;
+                                      currentY += 1;
+                                      break;
+                                  case "S":
+                                      currentX -= 1;
+                                      currentY -= 1;
+                                      break;
+                                  default:
+                                      deferred.reject(new Error('Unknown direction!'));
+                                      return deferred.promise;
+                              }
+                            }
+                        }
+                        tempX = currentX;
+                        tempY = currentY;
+                        if(motion.Condition===1)
+                        {
+                          switch(currentDirection) {
+                              case "E":
+                                  tempX += 1;
+                                  tempY += 1;
+                                  break;
+                              case "W":
+                                  tempX -= 1;
+                                  tempY -= 1;
+                                  break;
+                              case "N":
+                                  tempX -= 1;
+                                  tempY += 1;
+                                  break;
+                              case "S":
+                                  tempX += 1;
+                                  tempY -= 1;
+                                  break;
+                              default:
+                                  deferred.reject(new Error('Unknown direction!'));
+                                  return deferred.promise;
+                          }
+                        }
+                        else if(motion.Condition===2)
+                        {
+                          switch(currentDirection) {
+                              case "E":
+                                  tempX += 1;
+                                  break;
+                              case "W":
+                                  tempX -= 1;
+                                  break;
+                              case "N":
+                                  tempY += 1;
+                                  break;
+                              case "S":
+                                  tempY -= 1;
+                                  break;
+                              default:
+                                  deferred.reject(new Error('Unknown direction!'));
+                                  return deferred.promise;
+                          }
+                        }
+                        else if(motion.Condition===3)
+                        {
+                          switch(currentDirection) {
+                              case "E":
+                                  tempX += 1;
+                                  tempY -= 1;
+
+                                  break;
+                              case "W":
+                                  tempX -= 1;
+                                  tempY += 1;
+
+                                  break;
+                              case "N":
+                                  tempX += 1;
+                                  tempY += 1;
+
+                                  break;
+                              case "S":
+                                  tempX -= 1;
+                                  tempY -= 1;
+
+                                  break;
+                              default:
+                                  deferred.reject(new Error('Unknown direction!'));
+                                  return deferred.promise;
+                          }
+                        }
+                        }
+                      }
+                        break;
+                        case 8://If statement
+                        {
+                          var tempX = currentX;
+                          var tempY = currentY;
+                          if(motion.Condition===1)
+                          {
+                            switch(currentDirection) {
+                                case "E":
+                                    tempX += 1;
+                                    tempY += 1;
+                                    break;
+                                case "W":
+                                    tempX -= 1;
+                                    tempY -= 1;
+                                    break;
+                                case "N":
+                                    tempX -= 1;
+                                    tempY += 1;
+                                    break;
+                                case "S":
+                                    tempX += 1;
+                                    tempY -= 1;
+                                    break;
+                                default:
+                                    deferred.reject(new Error('Unknown direction!'));
+                                    return deferred.promise;
+                            }
+                          }
+                          else if(motion.Condition===2)
+                          {
+                            switch(currentDirection) {
+                                case "E":
+                                    tempX += 1;
+                                    break;
+                                case "W":
+                                    tempX -= 1;
+                                    break;
+                                case "N":
+                                    tempY += 1;
+                                    break;
+                                case "S":
+                                    tempY -= 1;
+                                    break;
+                                default:
+                                    deferred.reject(new Error('Unknown direction!'));
+                                    return deferred.promise;
+                            }
+                          }
+                          else if(motion.Condition===3)
+                          {
+                            switch(currentDirection) {
+                                case "E":
+                                    tempX += 1;
+                                    tempY -= 1;
+
+                                    break;
+                                case "W":
+                                    tempX -= 1;
+                                    tempY += 1;
+
+                                    break;
+                                case "N":
+                                    tempX += 1;
+                                    tempY += 1;
+
+                                    break;
+                                case "S":
+                                    tempX -= 1;
+                                    tempY -= 1;
+
+                                    break;
+                                default:
+                                    deferred.reject(new Error('Unknown direction!'));
+                                    return deferred.promise;
+                            }
+                          }
+                          if( tempX == self.letterToNumber(pathModel.obstacleX) && tempY == (gridSize-pathModel.obstacleY)) {
+                            self.logger.info("If returned false");
+                      	}
+                        else
+                        {
+                          self.logger.info("If returned true");
+                          for(j = 0; j<motion.CodeToExecute.length;j+=1)
+                          {
+                            if(motion.CodeToExecute[j]===1)
+                            {
+                              if(motion.Condition===1||motion.Condition===3)
+                              {
+                                self.logger.warn("Straight might not be safe");
+                              }
+                              switch(currentDirection) {
+                                  case "E":
+                                      currentX += 1;
+                                      break;
+                                  case "W":
+                                      currentX -= 1;
+                                      break;
+                                  case "N":
+                                      currentY += 1;
+                                      break;
+                                  case "S":
+                                      currentY -= 1;
+                                      break;
+                                  default:
+                                      deferred.reject(new Error('Unknown direction!'));
+                                      return deferred.promise;
+                              }
+                            }
+                            else if(motion.CodeToExecute[j]===2)
+                            {
+                              if(motion.Condition===2||motion.Condition===3)
+                              {
+                                self.logger.warn("Left might not be safe");
+                              }
+                              switch(currentDirection) {
+                                  case "E":
+                                      currentX += 1;
+                                      currentY += 1;
+                                      currentDirection = "N";
+                                      break;
+                                  case "W":
+                                      currentX -= 1;
+                                      currentY -= 1;
+                                      currentDirection = "S";
+                                      break;
+                                  case "N":
+                                      currentX -= 1;
+                                      currentY += 1;
+                                      currentDirection = "W";
+                                      break;
+                                  case "S":
+                                      currentX += 1;
+                                      currentY -= 1;
+                                      currentDirection = "E";
+                                      break;
+                                  default:
+                                      deferred.reject(new Error('Unknown direction!'));
+                                      return deferred.promise;
+                              }
+                            }
+                            else if(motion.CodeToExecute[j]===3)
+                            {
+                              if(motion.Condition===2||motion.Condition===1)
+                              {
+                                self.logger.warn("Right might not be safe");
+                              }
+                              switch(currentDirection) {
+                                  case "E":
+                                      currentX += 1;
+                                      currentY -= 1;
+                                      currentDirection = "S";
+                                      break;
+                                  case "W":
+                                      currentX -= 1;
+                                      currentY += 1;
+                                      currentDirection = "N";
+                                      break;
+                                  case "N":
+                                      currentX += 1;
+                                      currentY += 1;
+                                      currentDirection = "E";
+                                      break;
+                                  case "S":
+                                      currentX -= 1;
+                                      currentY -= 1;
+                                      currentDirection = "W";
+                                      break;
+                                  default:
+                                      deferred.reject(new Error('Unknown direction!'));
+                                      return deferred.promise;
+                              }
+                            }
+                            else if(motion.CodeToExecute[j]===4)
+                            {
+                              if(motion.Condition===2||motion.Condition===3)
+                              {
+                                self.logger.warn("ZigZagLeft might not be safe");
+                              }
+                              switch(currentDirection) {
+                                  case "E":
+                                      currentX += 1;
+                                      currentY += 1;
+                                      break;
+                                  case "W":
+                                      currentX -= 1;
+                                      currentY -= 1;
+                                      break;
+                                  case "N":
+                                  currentX -= 1;
+                                  currentY += 1;
+                                  break;
+                              case "S":
+                                  currentX += 1;
+                                  currentY -= 1;
+                                  break;
+                              default:
+                                  deferred.reject(new Error('Unknown direction!'));
+                                  return deferred.promise;
+                          }
+                        }
+                        else if(motion.CodeToExecute[j]===5)
+                        {
+                          if(motion.Condition===2||motion.Condition===1)
+                          {
+                            self.logger.warn("ZigZagRight might not be safe");
+                          }
+                          switch(currentDirection) {
+                              case "E":
+                                  currentX += 1;
+                                  currentY -= 1;
+                                  break;
+                              case "W":
+                                  currentX -= 1;
+                                  currentY += 1;
+                                  break;
+                              case "N":
+                                  currentX += 1;
+                                  currentY += 1;
+                                  break;
+                              case "S":
+                                  currentX -= 1;
+                                  currentY -= 1;
+                                  break;
+                              default:
+                              deferred.reject(new Error('Unknown direction!'));
+                              return deferred.promise;
+                      }
+                    }
+                }
+                }
+              }
+                break;
                     default:
                         deferred.reject(new Error('Unknown motion!'));
                         return deferred.promise;
