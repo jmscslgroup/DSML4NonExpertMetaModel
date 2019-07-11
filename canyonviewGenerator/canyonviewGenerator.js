@@ -1770,7 +1770,7 @@ function getNextChild(connection)
                     }
                 }
             }
-/**
+
     	if( count-1 < minNumberOfMoves ) {
     		deferred.reject(new Error('Not enough moves!  you more than ' + minNumberOfMoves + ' moves, you have ' + (count-1) + ' moves.'));
                     return deferred.promise;
@@ -1794,7 +1794,7 @@ function getNextChild(connection)
                 deferred.reject(new Error('The end was not reached from the start! ' + errorString));
                 return deferred.promise;
             }
-**/
+
             deferred.resolve(dataModel);
 
             return deferred.promise;
