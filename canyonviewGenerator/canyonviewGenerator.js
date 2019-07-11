@@ -930,7 +930,7 @@ function getNextChild(connection)
                 deferred = new Q.defer(),
                 i,
                 gridSize = 4,
-                minNumberOfMoves = 6,
+                minNumberOfMoves = 1,
                 maxNumberOfMoves = 100,
                 count = 1,
                 currentX,
@@ -1306,10 +1306,7 @@ function getNextChild(connection)
                           {
                             if(motion.CodeToExecute[j]===1)
                             {
-                              if(motion.Condition===1||motion.Condition===3)
-                              {
-                                self.logger.warn("Straight might not be safe");
-                              }
+
                               switch(currentDirection) {
                                   case "E":
                                       currentX += 1;
@@ -1330,10 +1327,7 @@ function getNextChild(connection)
                             }
                             else if(motion.CodeToExecute[j]===2)
                             {
-                              if(motion.Condition===2||motion.Condition===3)
-                              {
-                                self.logger.warn("Left might not be safe");
-                              }
+
                               switch(currentDirection) {
                                   case "E":
                                       currentX += 1;
@@ -1362,10 +1356,7 @@ function getNextChild(connection)
                             }
                             else if(motion.CodeToExecute[j]===3)
                             {
-                              if(motion.Condition===2||motion.Condition===1)
-                              {
-                                self.logger.warn("Right might not be safe");
-                              }
+
                               switch(currentDirection) {
                                   case "E":
                                       currentX += 1;
@@ -1394,10 +1385,7 @@ function getNextChild(connection)
                             }
                             else if(motion.CodeToExecute[j]===4)
                             {
-                              if(motion.Condition===2||motion.Condition===3)
-                              {
-                                self.logger.warn("ZigZagLeft might not be safe");
-                              }
+
                               switch(currentDirection) {
                                   case "E":
                                       currentX += 1;
@@ -1422,10 +1410,7 @@ function getNextChild(connection)
                             }
                             else if(motion.CodeToExecute[j]===5)
                             {
-                              if(motion.Condition===2||motion.Condition===1)
-                              {
-                                self.logger.warn("ZigZagRight might not be safe");
-                              }
+
                               switch(currentDirection) {
                                   case "E":
                                       currentX += 1;
@@ -1612,10 +1597,6 @@ function getNextChild(connection)
                           {
                             if(motion.CodeToExecute[j]===1)
                             {
-                              if(motion.Condition===1||motion.Condition===3)
-                              {
-                                self.logger.warn("Straight might not be safe");
-                              }
                               switch(currentDirection) {
                                   case "E":
                                       currentX += 1;
@@ -1636,10 +1617,7 @@ function getNextChild(connection)
                             }
                             else if(motion.CodeToExecute[j]===2)
                             {
-                              if(motion.Condition===2||motion.Condition===3)
-                              {
-                                self.logger.warn("Left might not be safe");
-                              }
+
                               switch(currentDirection) {
                                   case "E":
                                       currentX += 1;
@@ -1668,10 +1646,7 @@ function getNextChild(connection)
                             }
                             else if(motion.CodeToExecute[j]===3)
                             {
-                              if(motion.Condition===2||motion.Condition===1)
-                              {
-                                self.logger.warn("Right might not be safe");
-                              }
+
                               switch(currentDirection) {
                                   case "E":
                                       currentX += 1;
@@ -1700,10 +1675,7 @@ function getNextChild(connection)
                             }
                             else if(motion.CodeToExecute[j]===4)
                             {
-                              if(motion.Condition===2||motion.Condition===3)
-                              {
-                                self.logger.warn("ZigZagLeft might not be safe");
-                              }
+
                               switch(currentDirection) {
                                   case "E":
                                       currentX += 1;
@@ -1728,10 +1700,7 @@ function getNextChild(connection)
                         }
                         else if(motion.CodeToExecute[j]===5)
                         {
-                          if(motion.Condition===2||motion.Condition===1)
-                          {
-                            self.logger.warn("ZigZagRight might not be safe");
-                          }
+
                           switch(currentDirection) {
                               case "E":
                                   currentX += 1;
@@ -1801,7 +1770,7 @@ function getNextChild(connection)
                     }
                 }
             }
-
+/**
     	if( count-1 < minNumberOfMoves ) {
     		deferred.reject(new Error('Not enough moves!  you more than ' + minNumberOfMoves + ' moves, you have ' + (count-1) + ' moves.'));
                     return deferred.promise;
@@ -1825,7 +1794,7 @@ function getNextChild(connection)
                 deferred.reject(new Error('The end was not reached from the start! ' + errorString));
                 return deferred.promise;
             }
-
+**/
             deferred.resolve(dataModel);
 
             return deferred.promise;
