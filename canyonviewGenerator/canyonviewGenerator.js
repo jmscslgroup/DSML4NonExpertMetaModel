@@ -37,71 +37,69 @@ define([
      * @classdesc This class represents the plugin canyonviewGenerator.
      * @constructor
      */
-    var canyonviewGenerator = function () {
-        // Call base class' constructor.
-        PluginBase.call(this);
-        this.metaTypes = MetaTypes;
-        this.pluginMetadata = pluginMetadata;
-//Adds languages for plugin to template and output as artifact
-        this.LANGUAGES = [
-            {
-                name: 'C++',
-                generated: 'c++.generated.cpp.ejs',
-                batFile: 'c++.bat.ejs',
-                static: 'c++.simulator.cpp.ejs',
-				fileExtension: 'cpp',
-				fileName: 'Path'
-            },{
-                name: 'Path',
-                generated: 'path.generated.txt.ejs',
-                static: 'path.simulator.txt.ejs',
-                fileExtension: 'txt',
-				fileName: 'Path'
-      },/**{
-                name: 'ev3p',
-                generated: 'robot program.ev3p.ejs',
-                static: 'robot program.simulator.ev3p.ejs',
-                fileExtension: 'ev3p',
-				fileName: 'robot program'
-            }
-            **/
-        ];
-        /**
-	   this.LANGUAGESLEGO = [
-			{
-						 name: 'ev3p',
-						 generated: 'robot program.ev3p.ejs',
-						 static: 'robot program.simulator.ev3p.ejs',
-						 fileExtension: '.ev3p',
-						 fileName: 'robot program'
-           },
-							 name: '___CopyrightYear',
-							 generated: '___CopyrightYear.ejs',
-							 fileExtension: '',
-							 fileName: '___CopyrightYear'
-							 },{
-							 name: '___ProjectTitle',
-							 generated: '___ProjectTitle.ejs',
-							 fileExtension: '',
-							 fileName: '___ProjectTitle'
-							 },{
-							 name: 'Activity.x3a',
-							 generated: 'Activity.x3a.ejs',
-							 fileExtension: '.x3a',
-							 fileName: 'Activity'
-							 },{
-							 name: 'ActivityAssets.laz',
-							 generated: 'ActivityAssets.laz.ejs',
-							 fileExtension: '.laz',
-							 fileName: 'ActivityAssets'
-							 },{
-							 name: 'Project.lvprojx',
-							 generated: 'Project.lvprojx.ejs',
-							 fileExtension: '.lvprojx',
-							 fileName: 'Project'
-							 }
-		];**/
-    };
+     var canyonviewGenerator = function () {
+         // Call base class' constructor.
+         PluginBase.call(this);
+         this.metaTypes = MetaTypes;
+         this.pluginMetadata = pluginMetadata;
+
+         this.LANGUAGES = [
+             {
+                 name: 'C++',
+                 generated: 'c++.generated.cpp.ejs',
+                 batFile: 'c++.bat.ejs',
+                 static: 'c++.simulator.cpp.ejs',
+ 				fileExtension: 'cpp',
+ 				fileName: 'Path'
+             },{
+                 name: 'Path',
+                 generated: 'path.generated.txt.ejs',
+                 static: 'path.simulator.txt.ejs',
+                 fileExtension: 'txt',
+ 				fileName: 'Path'
+             },{
+                 name: 'ev3p',
+                 generated: 'robot program.ev3p.ejs',
+                 static: 'robot program.simulator.ev3p.ejs',
+                 fileExtension: 'ev3p',
+ 				fileName: 'robot program'
+             }
+         ];
+ 	   this.LANGUAGESLEGO = [
+ 			{
+ 						 name: 'ev3p',
+ 						 generated: 'robot program.ev3p.ejs',
+ 						 static: 'robot program.simulator.ev3p.ejs',
+ 						 fileExtension: '.ev3p',
+ 						 fileName: 'robot program'
+ 							 },{
+ 							 name: '___CopyrightYear',
+ 							 generated: '___CopyrightYear.ejs',
+ 							 fileExtension: '',
+ 							 fileName: '___CopyrightYear'
+ 							 },{
+ 							 name: '___ProjectTitle',
+ 							 generated: '___ProjectTitle.ejs',
+ 							 fileExtension: '',
+ 							 fileName: '___ProjectTitle'
+ 							 },{
+ 							 name: 'Activity.x3a',
+ 							 generated: 'Activity.x3a.ejs',
+ 							 fileExtension: '.x3a',
+ 							 fileName: 'Activity'
+ 							 },{
+ 							 name: 'ActivityAssets.laz',
+ 							 generated: 'ActivityAssets.laz.ejs',
+ 							 fileExtension: '.laz',
+ 							 fileName: 'ActivityAssets'
+ 							 },{
+ 							 name: 'Project.lvprojx',
+ 							 generated: 'Project.lvprojx.ejs',
+ 							 fileExtension: '.lvprojx',
+ 							 fileName: 'Project'
+ 							 }
+ 		];
+     };
 
     /**
      * Metadata associated with the plugin. Contains id, name, version, description, icon, configStructue etc.
@@ -141,6 +139,9 @@ let promise2;
 //Builds connections for path for codetoexecute awaits and promises to fix asynchonous
   await new Promise(done=>{ self.core.loadChildren(abstractControlBlock, async function (err, children)
   {
+
+    if(children.length>0)
+    {
 
 
     if (err) {
@@ -252,6 +253,7 @@ let promise2;
   }
   //Debugging statement
 console.log("This is list after: "+controlData.CodeToExecute);
+}
 //Fixes asynch bug where list is not updated to template after path is built
 done();
   });
@@ -748,31 +750,28 @@ function getNextChild(connection)
         //     })
         //     .nodeify(callback);
     }
-    //Removed lego code generation
-/**
-	canyonviewGenerator.prototype.addLanguageToFilesLego = function (filesToAdd, dataModel, languageInfo) {
-	   //var 	genFileName = 'GeneratedCode/' + languageInfo.name + '/' + dataModel.pathModel.name + '.' + languageInfo.fileExtension;//,
-	   var 	genFileName = languageInfo.fileName + languageInfo.fileExtension;//,
-	   //batFileName = 'FSM-GeneratedCode/' + languageInfo.name + '/execute.bat';
+    canyonviewGenerator.prototype.addLanguageToFilesLego = function (filesToAdd, dataModel, languageInfo) {
+  	   //var 	genFileName = 'GeneratedCode/' + languageInfo.name + '/' + dataModel.pathModel.name + '.' + languageInfo.fileExtension;//,
+  	   var 	genFileName = languageInfo.fileName + languageInfo.fileExtension;//,
+  	   //batFileName = 'FSM-GeneratedCode/' + languageInfo.name + '/execute.bat';
 
-	   //this.logger.info('addLanguageToFiles()');
+  	   //this.logger.info('addLanguageToFiles()');
 
-	   this.logger.info('addLanguageToFilesLego(): ' + genFileName);
-	   //   this.logger.debug(batFileName);
+  	   this.logger.info('addLanguageToFilesLego(): ' + genFileName);
+  	   //   this.logger.debug(batFileName);
 
-	   //this.logger.info('programJsTemplate[languageInfo.generated] = ' + programJsTemplate[languageInfo.generated]);
-	   //this.logger.info('programJsTemplate[' + languageInfo.generated + '] = ' + programJsTemplate[languageInfo.generated]);
-	   //this.logger.info(JSON.stringify(programJsTemplate, null, 2));
-	   //this.logger.info(JSON.stringify(MetaTypes, null, 2));
+  	   //this.logger.info('programJsTemplate[languageInfo.generated] = ' + programJsTemplate[languageInfo.generated]);
+  	   //this.logger.info('programJsTemplate[' + languageInfo.generated + '] = ' + programJsTemplate[languageInfo.generated]);
+  	   //this.logger.info(JSON.stringify(programJsTemplate, null, 2));
+  	   //this.logger.info(JSON.stringify(MetaTypes, null, 2));
 
-	   filesToAdd[genFileName] = ejs.render(programJsTemplate[languageInfo.generated], dataModel);
-	   // filesToAdd[batFileName] = ejs.render(TEMPLATES[languageInfo.batFile], dataModel);
+  	   filesToAdd[genFileName] = ejs.render(programJsTemplate[languageInfo.generated], dataModel);
+  	   // filesToAdd[batFileName] = ejs.render(TEMPLATES[languageInfo.batFile], dataModel);
 
-	   //TODO Add the static files too.
-	   this.logger.info('Generated lego files for', languageInfo.name);
+  	   //TODO Add the static files too.
+  	   this.logger.info('Generated lego files for', languageInfo.name);
 
-    };
-**/
+      };
 //Generate artifacts for languages specified
     canyonviewGenerator.prototype.addLanguageToFiles = function (filesToAdd, dataModel, languageInfo) {
 	   //var 	genFileName = 'GeneratedCode/' + languageInfo.name + '/' + dataModel.pathModel.name + '.' + languageInfo.fileExtension;//,
@@ -796,53 +795,52 @@ function getNextChild(connection)
         this.logger.info('Generated files for', languageInfo.name);
 
     };
-//Removed lego generation
-	//canyonviewGenerator.prototype.generateArtifactLego = function (dataModel) {
-	   //var self = this,
-	   ///filesToAdd = {},
-	   //deferred = new Q.defer(),
-	   //jsonToXml = new Converter.JsonToXml(),
-	   //artifact = self.blobClient.createArtifact('lego');
+    canyonviewGenerator.prototype.generateArtifactLego = function (dataModel) {
+       var self = this,
+       filesToAdd = {},
+       deferred = new Q.defer(),
+       jsonToXml = new Converter.JsonToXml(),
+       artifact = self.blobClient.createArtifact('lego');
 
-	   //self.logger.info('generateArtifact:' + JSON.stringify(dataModel, null, 2));
+       //self.logger.info('generateArtifact:' + JSON.stringify(dataModel, null, 2));
 
-	   //filesToAdd['motionModel.json'] = JSON.stringify(dataModel, null, 2);
-	   //filesToAdd['metadata.json'] = JSON.stringify({
-		//											projectId: self.projectId,
-		//											commitHash: self.commitHash,
-		//											branchName: self.branchName,
-		//											timeStamp: (new Date()).toISOString(),
-		//											pluginVersion: self.getVersion()
-		//											}, null, 2);
-	   //self.addXmlMotionModel(filesToAdd, dataModel);	// TODO: add
-/**
-	   self.logger.info('generateArtifactLego(): ' + artifact.name);
-	   self.LANGUAGESLEGO.forEach(function (languageInfo) {
-							  self.logger.info('adding Language...');
-							  self.addLanguageToFilesLego(filesToAdd, dataModel, languageInfo);	// TODO: add
-							  });
+       //filesToAdd['motionModel.json'] = JSON.stringify(dataModel, null, 2);
+       //filesToAdd['metadata.json'] = JSON.stringify({
+      //											projectId: self.projectId,
+      //											commitHash: self.commitHash,
+      //											branchName: self.branchName,
+      //											timeStamp: (new Date()).toISOString(),
+      //											pluginVersion: self.getVersion()
+      //											}, null, 2);
+       //self.addXmlMotionModel(filesToAdd, dataModel);	// TODO: add
 
-	   artifact.addFiles(filesToAdd, function (err) {
-						 self.logger.info('artifact.addFiles()...');
-						 if (err) {
-						 deferred.reject(new Error(err));
-						 return;
-						 }
-						 self.blobClient.saveAllArtifacts(function (err, hashes) {
-                if (err) {
-														  deferred.reject(new Error(err));
-														  return;
-                }
+       self.logger.info('generateArtifactLego(): ' + artifact.name);
+       self.LANGUAGESLEGO.forEach(function (languageInfo) {
+                  self.logger.info('adding Language...');
+                  self.addLanguageToFilesLego(filesToAdd, dataModel, languageInfo);	// TODO: add
+                  });
 
-                self.result.addArtifact(hashes[1]);
-														  self.logger.info('generateArtifactLego(): ' + hashes[1]);
-                deferred.resolve(dataModel);
-														  });
-						 });
 
-	   return deferred.promise;
-    };
-**/
+       artifact.addFiles(filesToAdd, function (err) {
+               self.logger.info('artifact.addFiles()...');
+               if (err) {
+               deferred.reject(new Error(err));
+               return;
+               }
+               self.blobClient.saveAllArtifacts(function (err, hashes) {
+                  if (err) {
+                                deferred.reject(new Error(err));
+                                return;
+                  }
+
+                  self.result.addArtifact(hashes[1]);
+                                self.logger.info('generateArtifactLego(): ' + hashes[1]);
+                  deferred.resolve(dataModel);
+                                });
+               });
+
+       return deferred.promise;
+      };
 //Generation of zip file with all the templated code
     canyonviewGenerator.prototype.generateArtifact = function (dataModel) {
         var self = this,
@@ -1782,7 +1780,7 @@ function getNextChild(connection)
 
     	}
 
-
+/**
             if(expectedX != currentX ||
                 expectedY != currentY ||
                 pathModel.endDirection !== currentDirection) {
@@ -1794,7 +1792,7 @@ function getNextChild(connection)
                 deferred.reject(new Error('The end was not reached from the start! ' + errorString));
                 return deferred.promise;
             }
-
+**/
             deferred.resolve(dataModel);
 
             return deferred.promise;
@@ -1849,10 +1847,10 @@ function getNextChild(connection)
                 return self.generateArtifact(dataModel);
             })
 
-	   		//.then(function (dataModel) {
-			 	//self.logger.info('generating Lego artifacts!');
-			 	//return self.generateArtifactLego(dataModel);
-			 //})
+	   		.then(function (dataModel) {
+			 	self.logger.info('generating Lego artifacts!');
+			 	return self.generateArtifactLego(dataModel);
+			 })
             .then(function () {
                 //  console.log('generateDataModel().then().then(): dataModel: ' + JSON.stringify(dataModel, null, 4));
                 console.log('In success part');
