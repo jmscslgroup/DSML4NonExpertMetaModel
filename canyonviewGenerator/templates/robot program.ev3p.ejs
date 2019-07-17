@@ -12,6 +12,1374 @@
                     </ConfigurableMethodTerminal>
                     <Terminal Id="SequenceOut" Direction="Output" Wire="w6" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="52 33 18 18" />
                 </StartBlock>
+
+<%
+  addFor = function(componentID,componentX,wireID,isFinal,motionName,times,codeToExecute){
+%>
+<ConfigurableWhileLoop Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" DiagramId="d0" InterruptName="01">
+    <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 84 18 18" />
+      <%
+      if( isFinal) {
+      %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+codeToExecute.length+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+      } else {
+      %>                    <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+      }%>
+    <ConfigurableWhileLoop.BuiltInMethod CallType="LoopIndex">
+        <ConfigurableMethodCall Id="n0" Bounds="0 41 47 91" Target="LoopIndex\.vix">
+            <ConfigurableMethodTerminal ConfiguredValue="0">
+                <Terminal Id="LoopIterationCount" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+            </ConfigurableMethodTerminal>
+            <ConfigurableMethodTerminal>
+                <Terminal Id="Loop\ Index" Direction="Output" DataType="Single" Hotspot="0.5 1" Bounds="0 56 30 27" />
+            </ConfigurableMethodTerminal>
+            <Terminal Id="SequenceIn" Direction="Input" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 0 0" />
+            <%
+            if( isFinal) {
+            %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+            } else {
+  %>  <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="29 33 18 18" /><%
+            }%>
+
+        </ConfigurableMethodCall>
+    </ConfigurableWhileLoop.BuiltInMethod>
+    <ConfigurableWhileLoop.BuiltInMethod CallType="StopCondition">
+        <ConfigurableMethodCall Id="n1" Bounds="<%=componentX+30%> 41 85 91" Target="StopAfterNumberIterations\.vix">
+            <ConfigurableMethodTerminal ConfiguredValue="<%=times%>">
+                <Terminal Id="Iterations\ To\ Run" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="54 56 30 27" />
+            </ConfigurableMethodTerminal>
+            <ConfigurableMethodTerminal ConfiguredValue="0">
+                <Terminal Id="LoopIterationCount" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+            </ConfigurableMethodTerminal>
+            <ConfigurableMethodTerminal ConfiguredValue="0">
+                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+            </ConfigurableMethodTerminal>
+            <ConfigurableMethodTerminal ConfiguredValue="False">
+                <Terminal Id="Result" Direction="Output" DataType="Boolean" Hotspot="0.5 1" Bounds="0 0 0 0" />
+            </ConfigurableMethodTerminal>
+            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID+codeToExecute+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+            <%
+            if( isFinal) {
+            %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+codeToExecute.length+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+            } else {
+            %>                    <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+            }%>
+        </ConfigurableMethodCall>
+    </ConfigurableWhileLoop.BuiltInMethod>
+    <%var wireStart = wireID;
+    wireID++;%>
+    <%let i;
+    for (i = 0; i < codeToExecute.length; i += 1) {
+      if(codeToExecute[i]===1){
+      %>
+      <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                          <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                              <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="50">
+                              <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="50">
+                              <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="1">
+                              <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="True">
+                              <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                              <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                          </ConfigurableMethodTerminal>
+                          <%if(i===codeToExecute.length-1){//end%>
+                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                          <%}
+                          else{%>
+                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                            <%}%>
+                      </ConfigurableMethodCall>
+                      <%if(codeToExecute.length<=1){%>
+                        <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                      <%}
+                      else{
+                      if(i===codeToExecute.length-1){//end%>
+                      <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                        <%}
+                          else{%>
+                        <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                              <%}%>
+                              <%}%>
+                      <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                          <Content>Straight</Content>
+                      </Comment>
+      <%
+    }
+      else if(codeToExecute[i]===2){
+        %>
+        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="25">
+                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="50">
+                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="2.22">
+                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <%if(i===codeToExecute.length-1){//end%>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                            <%}
+                            else{%>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                              <%}%>
+                        </ConfigurableMethodCall>
+                        <%if(codeToExecute.length<=1){%>
+                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                        <%}
+                        else{
+                        if(i===codeToExecute.length-1){//end%>
+                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                          <%}
+                            else{%>
+                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                <%}%>
+                                <%}%>
+                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                            <Content>Left</Content>
+                        </Comment>
+      <%
+      }
+      else if (codeToExecute[i]===3){
+        %>
+        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="50">
+                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="25">
+                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="2.22">
+                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <%if(i===codeToExecute.length-1){//end%>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                            <%}
+                            else{%>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                              <%}%>
+                        </ConfigurableMethodCall>
+                        <%if(codeToExecute.length<=1){%>
+                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                        <%}
+                        else{
+                        if(i===codeToExecute.length-1){//end%>
+                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                          <%}
+                            else{%>
+                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                <%}%>
+                                <%}%>
+                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                            <Content>Right</Content>
+                        </Comment>
+        <%
+      }
+      else if (codeToExecute[i]===4){
+      %>
+      <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                          <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                              <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                              <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="40">
+                              <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                              <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="True">
+                              <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                              <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                          </ConfigurableMethodTerminal>
+
+                      </ConfigurableMethodCall>
+
+                      <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                          <Content>ZigZagLeft</Content>
+                      </Comment>
+<%
+componentX += 194;
+wireID++;
+%>
+<ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                    <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                        <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="15">
+                        <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="15">
+                        <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue=".5">
+                        <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="True">
+                        <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="0">
+                        <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                    </ConfigurableMethodTerminal>
+
+                </ConfigurableMethodCall>
+
+                <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                    <Content>ZigZagLeft</Content>
+                </Comment>
+                                      <%
+                                      componentX += 194;
+
+                                      wireID++;
+                                      %>
+                                      <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                          <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                              <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="40">
+                                                              <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                              <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                                              <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                              <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                              <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                          </ConfigurableMethodTerminal>
+
+                                                      </ConfigurableMethodCall>
+
+                                                      <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                          <Content>ZigZagLeft</Content>
+                                                      </Comment>
+                                                      <%
+                                                      componentX += 194;
+
+                                                      wireID++;
+                                                      %>
+                                                      <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                              <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                              <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                              <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue=".3">
+                                                                              <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                              <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                              <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <%if(i===codeToExecute.length-1){//end%>
+                                                                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                                                                          <%}
+                                                                          else{%>
+                                                                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                                                                            <%}%>
+                                                                      </ConfigurableMethodCall>
+                                                                      <%if(i===codeToExecute.length-1){//end%>
+                                                                      <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                                        <%}
+                                                                          else{%>
+                                                                        <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                                              <%}%>
+                                                                      <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                                          <Content>ZigZagLeft</Content>
+                                                                      </Comment>
+
+      <%}
+      else if (codeToExecute[i]===5){
+        %>
+        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="40">
+                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+
+                        </ConfigurableMethodCall>
+
+                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                            <Content>ZigZagRight</Content>
+                        </Comment>
+  <%
+  componentX += 194;
+  wireID++;
+  %>
+  <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                      <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                          <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue="15">
+                          <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue="15">
+                          <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue=".5">
+                          <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue="True">
+                          <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue="0">
+                          <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                      </ConfigurableMethodTerminal>
+
+                  </ConfigurableMethodCall>
+
+                  <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                      <Content>ZigZagRight</Content>
+                  </Comment>
+                                        <%
+                                        componentX += 194;
+
+                                        wireID++;
+                                        %>
+                                        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="40">
+                                                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                            </ConfigurableMethodTerminal>
+
+                                                        </ConfigurableMethodCall>
+
+                                                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                            <Content>ZigZagRight</Content>
+                                                        </Comment>
+                                                        <%
+                                                        componentX += 194;
+
+                                                        wireID++;
+                                                        %>
+                                                        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue=".3">
+                                                                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <%if(i===codeToExecute.length-1){//end%>
+                                                                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                                                                            <%}
+                                                                            else{%>
+                                                                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                                                                              <%}%>
+                                                                        </ConfigurableMethodCall>
+                                                                        <%if(i===codeToExecute.length-1){//end%>
+                                                                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                                          <%}
+                                                                            else{%>
+                                                                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                                                <%}%>
+                                                                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                                            <Content>ZigZagRight</Content>
+                                                                        </Comment>
+
+        <%
+      }
+      componentX += 194;
+    	wireID++;
+      }%>
+
+
+
+<Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=componentID-1%>:SequenceIn)" />
+
+
+
+</ConfigurableWhileLoop>
+<Wire Id="w<%=wireStart%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+<Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+    <Content><%=motionName%></Content>
+</Comment>
+<%
+}
+%>
+<%
+  addWhile = function(componentID,componentX,wireID,isFinal,motionName,condition,codeToExecute){
+%>
+<ConfigurableWhileLoop Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" DiagramId="d0" InterruptName="01">
+    <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 84 18 18" />
+      <%
+      if( isFinal) {
+      %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+codeToExecute.length+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+      } else {
+      %>                    <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+      }%>
+    <ConfigurableWhileLoop.BuiltInMethod CallType="LoopIndex">
+        <ConfigurableMethodCall Id="n0" Bounds="0 41 47 91" Target="LoopIndex\.vix">
+            <ConfigurableMethodTerminal ConfiguredValue="0">
+                <Terminal Id="LoopIterationCount" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+            </ConfigurableMethodTerminal>
+            <ConfigurableMethodTerminal>
+                <Terminal Id="Loop\ Index" Direction="Output" DataType="Single" Hotspot="0.5 1" Bounds="0 56 30 27" />
+            </ConfigurableMethodTerminal>
+            <Terminal Id="SequenceIn" Direction="Input" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 0 0" />
+            <%
+            if( isFinal) {
+            %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+            } else {
+  %>  <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="29 33 18 18" /><%
+            }%>
+
+        </ConfigurableMethodCall>
+    </ConfigurableWhileLoop.BuiltInMethod>
+    <ConfigurableWhileLoop.BuiltInMethod CallType="StopCondition">
+      <ConfigurableMethodCall Id="n1" Bounds="435 41 116 91" Target="IRProximityCompare\.vix">
+          <ConfigurableMethodTerminal ConfiguredValue="1.4">
+              <Terminal Id="Port" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+          </ConfigurableMethodTerminal>
+          <ConfigurableMethodTerminal ConfiguredValue="2">
+              <Terminal Id="Comparison" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="54 56 30 27" />
+          </ConfigurableMethodTerminal>
+          <ConfigurableMethodTerminal ConfiguredValue="10">
+              <Terminal Id="Threshold" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+          </ConfigurableMethodTerminal>
+          <ConfigurableMethodTerminal ConfiguredValue="0">
+              <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+          </ConfigurableMethodTerminal>
+          <ConfigurableMethodTerminal ConfiguredValue="False">
+              <Terminal Id="Result" Direction="Output" DataType="Boolean" Hotspot="0.5 1" Bounds="0 0 0 0" />
+          </ConfigurableMethodTerminal>
+          <ConfigurableMethodTerminal>
+          <Terminal Id="Proximity" Direction="Output" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+            </ConfigurableMethodTerminal>
+            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+            <%
+            if( isFinal) {
+            %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+codeToExecute.length+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+            } else {
+            %>                    <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+            }%>
+        </ConfigurableMethodCall>
+    </ConfigurableWhileLoop.BuiltInMethod>
+    <%var wireStart = wireID;
+    wireID++;%>
+    <%let i;
+    for (i = 0; i < codeToExecute.length; i += 1) {
+      if(codeToExecute[i]===1){
+      %>
+      <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                          <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                              <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="50">
+                              <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="50">
+                              <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="1">
+                              <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="True">
+                              <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                              <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                          </ConfigurableMethodTerminal>
+                          <%if(i===codeToExecute.length-1){//end%>
+                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                          <%}
+                          else{%>
+                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                            <%}%>
+                      </ConfigurableMethodCall>
+                      <%if(codeToExecute.length<=1){%>
+                        <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                      <%}
+                      else{
+                      if(i===codeToExecute.length-1){//end%>
+                      <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                        <%}
+                          else{%>
+                        <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                              <%}%>
+                              <%}%>
+                      <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                          <Content>Straight</Content>
+                      </Comment>
+      <%
+    }
+      else if(codeToExecute[i]===2){
+        %>
+        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="25">
+                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="50">
+                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="2.22">
+                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <%if(i===codeToExecute.length-1){//end%>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                            <%}
+                            else{%>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                              <%}%>
+                        </ConfigurableMethodCall>
+                        <%if(codeToExecute.length<=1){%>
+                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                        <%}
+                        else{
+                        if(i===codeToExecute.length-1){//end%>
+                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                          <%}
+                            else{%>
+                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                <%}%>
+                                <%}%>
+                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                            <Content>Left</Content>
+                        </Comment>
+      <%
+      }
+      else if (codeToExecute[i]===3){
+        %>
+        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="50">
+                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="25">
+                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="2.22">
+                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <%if(i===codeToExecute.length-1){//end%>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                            <%}
+                            else{%>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                              <%}%>
+                        </ConfigurableMethodCall>
+                        <%if(codeToExecute.length<=1){%>
+                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                        <%}
+                        else{
+                        if(i===codeToExecute.length-1){//end%>
+                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                          <%}
+                            else{%>
+                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                <%}%>
+                                <%}%>
+                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                            <Content>Right</Content>
+                        </Comment>
+        <%
+      }
+      else if (codeToExecute[i]===4){
+      %>
+      <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                          <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                              <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                              <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="40">
+                              <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                              <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="True">
+                              <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                          </ConfigurableMethodTerminal>
+                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                              <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                          </ConfigurableMethodTerminal>
+
+                      </ConfigurableMethodCall>
+
+                      <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                          <Content>ZigZagLeft</Content>
+                      </Comment>
+<%
+componentX += 194;
+wireID++;
+%>
+<ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                    <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                        <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="15">
+                        <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="15">
+                        <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue=".5">
+                        <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="True">
+                        <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                    </ConfigurableMethodTerminal>
+                    <ConfigurableMethodTerminal ConfiguredValue="0">
+                        <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                    </ConfigurableMethodTerminal>
+
+                </ConfigurableMethodCall>
+
+                <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                    <Content>ZigZagLeft</Content>
+                </Comment>
+                                      <%
+                                      componentX += 194;
+
+                                      wireID++;
+                                      %>
+                                      <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                          <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                              <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="40">
+                                                              <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                              <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                                              <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                              <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                          </ConfigurableMethodTerminal>
+                                                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                              <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                          </ConfigurableMethodTerminal>
+
+                                                      </ConfigurableMethodCall>
+
+                                                      <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                          <Content>ZigZagLeft</Content>
+                                                      </Comment>
+                                                      <%
+                                                      componentX += 194;
+
+                                                      wireID++;
+                                                      %>
+                                                      <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                              <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                              <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                              <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue=".3">
+                                                                              <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                              <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                              <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                          </ConfigurableMethodTerminal>
+                                                                          <%if(i===codeToExecute.length-1){//end%>
+                                                                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                                                                          <%}
+                                                                          else{%>
+                                                                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                                                                            <%}%>
+                                                                      </ConfigurableMethodCall>
+                                                                      <%if(i===codeToExecute.length-1){//end%>
+                                                                      <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                                        <%}
+                                                                          else{%>
+                                                                        <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                                              <%}%>
+                                                                      <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                                          <Content>ZigZagLeft</Content>
+                                                                      </Comment>
+
+      <%}
+      else if (codeToExecute[i]===5){
+        %>
+        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="40">
+                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                            </ConfigurableMethodTerminal>
+                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                            </ConfigurableMethodTerminal>
+
+                        </ConfigurableMethodCall>
+
+                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                            <Content>ZigZagRight</Content>
+                        </Comment>
+  <%
+  componentX += 194;
+  wireID++;
+  %>
+  <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                      <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                          <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue="15">
+                          <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue="15">
+                          <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue=".5">
+                          <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue="True">
+                          <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                      </ConfigurableMethodTerminal>
+                      <ConfigurableMethodTerminal ConfiguredValue="0">
+                          <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                      </ConfigurableMethodTerminal>
+
+                  </ConfigurableMethodCall>
+
+                  <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                      <Content>ZigZagRight</Content>
+                  </Comment>
+                                        <%
+                                        componentX += 194;
+
+                                        wireID++;
+                                        %>
+                                        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="40">
+                                                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                            </ConfigurableMethodTerminal>
+                                                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                            </ConfigurableMethodTerminal>
+
+                                                        </ConfigurableMethodCall>
+
+                                                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                            <Content>ZigZagRight</Content>
+                                                        </Comment>
+                                                        <%
+                                                        componentX += 194;
+
+                                                        wireID++;
+                                                        %>
+                                                        <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                                <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                                <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                                <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue=".3">
+                                                                                <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                                <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                                <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                            </ConfigurableMethodTerminal>
+                                                                            <%if(i===codeToExecute.length-1){//end%>
+                                                                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                                                                            <%}
+                                                                            else{%>
+                                                                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+                                                                              <%}%>
+                                                                        </ConfigurableMethodCall>
+                                                                        <%if(i===codeToExecute.length-1){//end%>
+                                                                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                                          <%}
+                                                                            else{%>
+                                                                          <Wire Id="w<%=wireID-1%>" Joints="N(n<%=componentID-2%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                                                <%}%>
+                                                                        <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                                            <Content>ZigZagRight</Content>
+                                                                        </Comment>
+
+        <%
+      }
+      componentX += 194;
+    	wireID++;
+      }%>
+
+
+
+<Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n<%=componentID-1%>:SequenceIn)" />
+
+
+
+</ConfigurableWhileLoop>
+<Wire Id="w<%=wireStart%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+<Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+    <Content><%=motionName%></Content>
+</Comment>
+<%
+}
+%>
+<%
+  addIf = function(componentID,componentX,wireID,isFinal,motionName,condition,codeToExecute){
+%>
+<PairedConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="IRProximityCompare\.vix" PairedStructure="n0">
+    <ConfigurableMethodTerminal ConfiguredValue="1.4">
+        <Terminal Id="Port" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+    </ConfigurableMethodTerminal>
+    <ConfigurableMethodTerminal ConfiguredValue="2">
+        <Terminal Id="Comparison" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="54 56 30 27" />
+    </ConfigurableMethodTerminal>
+    <ConfigurableMethodTerminal ConfiguredValue="10">
+        <Terminal Id="Threshold" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+    </ConfigurableMethodTerminal>
+    <ConfigurableMethodTerminal ConfiguredValue="0">
+        <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+    </ConfigurableMethodTerminal>
+    <ConfigurableMethodTerminal>
+        <Terminal Id="Result" Direction="Output" DataType="Boolean" Hotspot="0.5 1" Bounds="0 0 0 0" />
+    </ConfigurableMethodTerminal>
+    <ConfigurableMethodTerminal>
+        <Terminal Id="Proximity" Direction="Output" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+    </ConfigurableMethodTerminal>
+    <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+      <%
+      if( isFinal) {
+      %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+      } else {
+      %>                    <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
+      }%>
+</PairedConfigurableMethodCall>
+<ConfigurableFlatCaseStructure Id="n0" Bounds="1128 -129 414 348" DataType="Boolean" UserSelectorBounds="0 0 0 0" Default="D5" PairedConfigurableMethodCall="n9">
+    <Terminal Id="SequenceOut" Direction="Output" Wire="w15" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="396 162 18 18" />
+    <ConfigurableFlatCaseStructure.Case Id="D5" Bounds="10 4 394 164" Pattern="True">
+        <SequenceNode Id="Output" Bounds="0 73 18 18">
+            <Terminal Id="SequenceTerminal" Direction="Output" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="0 0 18 18" />
+        </SequenceNode>
+        <SequenceNode Id="Input" Bounds="<%=componentX%> 73 18 18">
+            <Terminal Id="SequenceTerminal" Direction="Input" Wire="w<%=componentID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 0 18 18" />
+        </SequenceNode>
+        <%for (i = 0; i < codeToExecute.length; i += 1) {
+          if(codeToExecute[i]===1){
+          %>
+          <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                              <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                  <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="50">
+                                  <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="50">
+                                  <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="1">
+                                  <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="True">
+                                  <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="0">
+                                  <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                              </ConfigurableMethodTerminal>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                          </ConfigurableMethodCall>
+                          <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                          <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                              <Content>Straight</Content>
+                          </Comment>
+          <%
+        }
+          else if(codeToExecute[i]===2){
+            %>
+            <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                    <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="25">
+                                    <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="50">
+                                    <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="2.22">
+                                    <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="True">
+                                    <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="0">
+                                    <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                </ConfigurableMethodTerminal>
+                                <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                            </ConfigurableMethodCall>
+                            <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                            <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                <Content>Left</Content>
+                            </Comment>
+          <%
+          }
+          else if (codeToExecute[i]===3){
+            %>
+            <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                    <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="50">
+                                    <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="25">
+                                    <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="2.22">
+                                    <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="True">
+                                    <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="0">
+                                    <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                </ConfigurableMethodTerminal>
+                                <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                            </ConfigurableMethodCall>
+                            <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                            <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                <Content>Right</Content>
+                            </Comment>
+            <%
+          }
+          else if (codeToExecute[i]===4){
+          %>
+          <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                              <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                  <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="0">
+                                  <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="40">
+                                  <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                  <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="True">
+                                  <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                              </ConfigurableMethodTerminal>
+                              <ConfigurableMethodTerminal ConfiguredValue="0">
+                                  <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                              </ConfigurableMethodTerminal>
+                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                              <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                          </ConfigurableMethodCall>
+                          <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                          <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                              <Content>ZigZagLeft</Content>
+                          </Comment>
+    <%
+    componentX += 194;
+    componentID++;
+    wireID++;
+    %>
+                          <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                              <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                  <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                              </ConfigurableMethodTerminal>
+                                              <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                  <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                              </ConfigurableMethodTerminal>
+                                              <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                  <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                              </ConfigurableMethodTerminal>
+                                              <ConfigurableMethodTerminal ConfiguredValue=".5">
+                                                  <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                              </ConfigurableMethodTerminal>
+                                              <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                  <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                              </ConfigurableMethodTerminal>
+                                              <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                  <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                              </ConfigurableMethodTerminal>
+                                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                              <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                                          </ConfigurableMethodCall>
+                                          <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                                          <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                              <Content>ZigZagLeft</Content>
+                                          </Comment>
+                                          <%
+                                          componentX += 194;
+                                          componentID++;
+                                          wireID++;
+                                          %>
+                                          <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                              <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                  <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                              </ConfigurableMethodTerminal>
+                                                              <ConfigurableMethodTerminal ConfiguredValue="40">
+                                                                  <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                              </ConfigurableMethodTerminal>
+                                                              <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                  <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                              </ConfigurableMethodTerminal>
+                                                              <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                                                  <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                              </ConfigurableMethodTerminal>
+                                                              <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                  <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                              </ConfigurableMethodTerminal>
+                                                              <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                  <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                              </ConfigurableMethodTerminal>
+                                                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                              <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                                                          </ConfigurableMethodCall>
+                                                          <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                                                          <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                              <Content>ZigZagLeft</Content>
+                                                          </Comment>
+                                                          <%
+                                                          componentX += 194;
+                                                          componentID++;
+                                                          wireID++;
+                                                          %>
+                                                          <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                                              <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                                  <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                              </ConfigurableMethodTerminal>
+                                                                              <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                                  <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                                              </ConfigurableMethodTerminal>
+                                                                              <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                                  <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                                              </ConfigurableMethodTerminal>
+                                                                              <ConfigurableMethodTerminal ConfiguredValue=".3">
+                                                                                  <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                                              </ConfigurableMethodTerminal>
+                                                                              <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                                  <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                                              </ConfigurableMethodTerminal>
+                                                                              <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                                  <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                              </ConfigurableMethodTerminal>
+                                                                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                              <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                                                                          </ConfigurableMethodCall>
+                                                                          <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                                                                          <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                                              <Content>ZigZagLeft</Content>
+                                                                          </Comment>
+
+          <%}
+          else if (codeToExecute[i]===5){
+            %>
+            <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                    <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="40">
+                                    <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="0">
+                                    <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                    <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="True">
+                                    <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                </ConfigurableMethodTerminal>
+                                <ConfigurableMethodTerminal ConfiguredValue="0">
+                                    <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                </ConfigurableMethodTerminal>
+                                <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                            </ConfigurableMethodCall>
+                            <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                            <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                <Content>ZigZagRight</Content>
+                            </Comment>
+                            <%
+                            componentX += 194;
+                            componentID++;
+                            wireID++;
+                            %>
+                            <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                    <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                </ConfigurableMethodTerminal>
+                                                <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                    <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                </ConfigurableMethodTerminal>
+                                                <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                    <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                </ConfigurableMethodTerminal>
+                                                <ConfigurableMethodTerminal ConfiguredValue=".5">
+                                                    <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                </ConfigurableMethodTerminal>
+                                                <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                    <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                </ConfigurableMethodTerminal>
+                                                <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                    <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                </ConfigurableMethodTerminal>
+                                                <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                                            </ConfigurableMethodCall>
+                                            <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                                            <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                <Content>ZigZagRight</Content>
+                                            </Comment>
+                                            <%
+                                            componentX += 194;
+                                            componentID++;
+                                            wireID++;
+                                            %>
+                                            <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                                <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                    <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                </ConfigurableMethodTerminal>
+                                                                <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                    <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                                </ConfigurableMethodTerminal>
+                                                                <ConfigurableMethodTerminal ConfiguredValue="40">
+                                                                    <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                                </ConfigurableMethodTerminal>
+                                                                <ConfigurableMethodTerminal ConfiguredValue="1.028">
+                                                                    <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                                </ConfigurableMethodTerminal>
+                                                                <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                    <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                                </ConfigurableMethodTerminal>
+                                                                <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                    <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                </ConfigurableMethodTerminal>
+                                                                <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                                                            </ConfigurableMethodCall>
+                                                            <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                                                            <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                                <Content>ZigZagRight</Content>
+                                                            </Comment>
+                                                            <%
+                                                            componentX += 194;
+                                                            componentID++;
+                                                            wireID++;
+                                                            %>
+                                                            <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
+                                                                                <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
+                                                                                    <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                                </ConfigurableMethodTerminal>
+                                                                                <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                                    <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
+                                                                                </ConfigurableMethodTerminal>
+                                                                                <ConfigurableMethodTerminal ConfiguredValue="15">
+                                                                                    <Terminal Id="Speed\ Right" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
+                                                                                </ConfigurableMethodTerminal>
+                                                                                <ConfigurableMethodTerminal ConfiguredValue=".3">
+                                                                                    <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
+                                                                                </ConfigurableMethodTerminal>
+                                                                                <ConfigurableMethodTerminal ConfiguredValue="True">
+                                                                                    <Terminal Id="Brake\ At\ End" Direction="Input" DataType="Boolean" Hotspot="0.5 1" Bounds="147 56 30 27" />
+                                                                                </ConfigurableMethodTerminal>
+                                                                                <ConfigurableMethodTerminal ConfiguredValue="0">
+                                                                                    <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
+                                                                                </ConfigurableMethodTerminal>
+                                                                                <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                                                <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
+
+                                                                            </ConfigurableMethodCall>
+                                                                            <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                                                                            <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+                                                                                <Content>ZigZagRight</Content>
+                                                                            </Comment>
+
+            <%
+          }
+          componentX += 194;
+        	componentID++;
+        	wireID++;
+          }%>
+
+
+
+        <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID%>:SequenceOut) N(Input:SequenceTerminal)" />
+        <Wire Id="w<%=wireID+1%>" Joints="N(n<%=componentID%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+    </ConfigurableFlatCaseStructure.Case>
+    <ConfigurableFlatCaseStructure.Case Id="d1" Bounds="10 175 394 169" Pattern="False">
+        <SequenceNode Id="Output" Bounds="0 75 18 18">
+            <Terminal Id="SequenceTerminal" Direction="Output" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="0 0 18 18" />
+        </SequenceNode>
+        <SequenceNode Id="Input" Bounds="<%=componentX%> 75 18 18">
+            <Terminal Id="SequenceTerminal" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 0 18 18" />
+        </SequenceNode>
+        <Wire Id="w<%=wireID%>" Joints="N(Output:SequenceTerminal) N(Input:SequenceTerminal)" />
+    </ConfigurableFlatCaseStructure.Case>
+</ConfigurableFlatCaseStructure>
+<Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+<Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
+    <Content><%=motionName%></Content>
+</Comment>
+<%
+}
+%>
 <%
     addMotion = function(componentID,componentX,legoL,legoR, legoRot, wireID, isFinal, motionName) {
 %>                <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
@@ -71,19 +1439,19 @@ while(haveMotion) {
             legoL = 50;
             legoR = 50;
             legoRot = 1;
-            addMotion(componentID,componentX,legoL,legoR,legoRot,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+            addMotion(componentID,componentX,legoL,legoR,legoRot,wireID, motion.Connections.length != 0, motion.name);
             break;
         case 2:	// Left
             legoL = 25;
             legoR = 50;
             legoRot = 2.22;
-            addMotion(componentID,componentX,legoL,legoR,legoRot,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+            addMotion(componentID,componentX,legoL,legoR,legoRot,wireID, motion.Connections.length != 0, motion.name);
             break;
 		case 3:	// Right
 			legoL = 50;
 			legoR = 25;
 			legoRot = 2.22;
-            addMotion(componentID,componentX,legoL,legoR,legoRot,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+            addMotion(componentID,componentX,legoL,legoR,legoRot,wireID, motion.Connections.length != 0, motion.name);
 			break;
         case 4:// ZigZagLeft
             addMotion(componentID,componentX,0,40,1.028,wireID, false, motion.name);
@@ -98,7 +1466,7 @@ while(haveMotion) {
             componentX += 194;
             componentID++;
             wireID++;
-            addMotion(componentID,componentX,15,15,0.3,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+            addMotion(componentID,componentX,15,15,0.3,wireID, motion.Connections.length != 0, motion.name);
             break;
         case 5:// ZigZagRight
             addMotion(componentID,componentX,40,0,1.028,wireID, false, motion.name);
@@ -113,7 +1481,16 @@ while(haveMotion) {
             componentX += 194;
             componentID++;
             wireID++;
-            addMotion(componentID,componentX,15,15,0.3,wireID, motion.PrimitiveMotionConnections.length != 0, motion.name);
+            addMotion(componentID,componentX,15,15,0.3,wireID, motion.Connections.length != 0, motion.name);
+            break;
+        case 6:
+            addFor(componentID,componentX,wireID,motion.Connections.length==0,motion.name,motion.Times,motion.CodeToExecute);
+            break;
+        case 7:
+            addWhile(componentID,componentX,wireID,motion.Connections.length==0,motion.name,motion.Condition,motion.CodeToExecute);
+            break;
+        case 8:
+            addIf(componentID,componentX,wireID,motion.Connections.length==0,motion.name,motion.Condition,motion.CodeToExecute);
             break;
 	}
 
@@ -122,10 +1499,10 @@ while(haveMotion) {
 
 
 	haveMotion = false;
-	if( motion.PrimitiveMotionConnections.length != 0) {
+	if( motion.Connections.length != 0) {
 	//	console.log('There exists an outgoing connection');
 		for (i = 0; i < pathModel.motion.length; i += 1) {
-			if(pathModel.motion[i].id === motion.PrimitiveMotionConnections[0].targetId) {
+			if(pathModel.motion[i].id === motion.Connections[0].targetId) {
 				haveMotion = true;
 				motion = pathModel.motion[i];
 				break;
