@@ -69,6 +69,7 @@
     <%var wireStart = wireID;
     wireID++;%>
     <%let i;
+
     for (i = 0; i < codeToExecute.length; i += 1) {
       if(codeToExecute[i]===1){
       %>
@@ -91,24 +92,20 @@
                           <ConfigurableMethodTerminal ConfiguredValue="0">
                               <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                           </ConfigurableMethodTerminal>
-                          <%if(i===codeToExecute.length-1){//end%>
+
                             <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                             <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                          <%}
-                          else{%>
-                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
-                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                            <%}%>
+
                       </ConfigurableMethodCall>
 
-                      <%if(i===codeToExecute.length-1){//end%>
+                      <%if(i===0){//start%>
 
                       <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
 
-                        <%}
-                          else{%>
-                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
-                              <%}%>
+                        <%}%>
+                        <%if(i!=codeToExecute.length-1){%>
+                        <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
+                          <%}%>
 
                       <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                           <Content>Straight</Content>
@@ -136,24 +133,20 @@
                             <ConfigurableMethodTerminal ConfiguredValue="0">
                                 <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                             </ConfigurableMethodTerminal>
-                            <%if(i===codeToExecute.length-1){//end%>
+
                               <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                               <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                            <%}
-                            else{%>
-                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
-                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                              <%}%>
+
                         </ConfigurableMethodCall>
 
-                        <%if(i===codeToExecute.length-1){//end%>
+                        <%if(i===0){//end%>
 
                         <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
 
-                          <%}
-                            else{%>
-                          <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
-                                <%}%>
+                          <%}%>
+                          <%if(i!=codeToExecute.length-1){%>
+                          <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
+                            <%}%>
 
                         <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                             <Content>Left</Content>
@@ -181,24 +174,20 @@
                             <ConfigurableMethodTerminal ConfiguredValue="0">
                                 <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                             </ConfigurableMethodTerminal>
-                            <%if(i===codeToExecute.length-1){//end%>
+
                               <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                               <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                            <%}
-                            else{%>
-                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
-                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                              <%}%>
+
                         </ConfigurableMethodCall>
 
-                        <%if(i===codeToExecute.length-1){//end%>
+                        <%if(i===0){//start%>
 
                         <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
 
-                          <%}
-                            else{%>
-                          <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
-                                <%}%>
+                          <%}%>
+                          <%if(i!=codeToExecute.length-1){%>
+                          <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
+                            <%}%>
 
                         <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                             <Content>Right</Content>
@@ -226,10 +215,15 @@
                           <ConfigurableMethodTerminal ConfiguredValue="0">
                               <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                           </ConfigurableMethodTerminal>
-                          <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                          <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                           <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
                       </ConfigurableMethodCall>
-                      <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                      <%if(i===0){//start%>
+
+                      <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+
+                        <%}%>
+                      <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
                       <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                           <Content>ZigZagLeft</Content>
                       </Comment>
@@ -257,10 +251,10 @@ wireID++;
                         <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                     </ConfigurableMethodTerminal>
 
-                    <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                    <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                     <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
                 </ConfigurableMethodCall>
-                <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
 
                 <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                     <Content>ZigZagLeft</Content>
@@ -290,10 +284,10 @@ wireID++;
                                                               <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                                                           </ConfigurableMethodTerminal>
 
-                                                          <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                          <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                                                           <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
                                                       </ConfigurableMethodCall>
-                                                      <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                      <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
 
                                                       <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                                                           <Content>ZigZagLeft</Content>
@@ -322,23 +316,14 @@ wireID++;
                                                                           <ConfigurableMethodTerminal ConfiguredValue="0">
                                                                               <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                                                                           </ConfigurableMethodTerminal>
-                                                                          <%if(i===codeToExecute.length-1){//end%>
+
                                                                             <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                                                                             <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                                                                          <%}
-                                                                          else{%>
-                                                                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
-                                                                            <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                                                                            <%}%>
+
                                                                       </ConfigurableMethodCall>
-                                                                      <%if(i===codeToExecute.length-1){//end%>
-
-                                                                      <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
-
-                                                                        <%}
-                                                                          else{%>
-                                                                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
-                                                                              <%}%>
+                                                                      <%if(i!=codeToExecute.length-1){%>
+                                                                      <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
+                                                                        <%}%>
                                                                       <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                                                                           <Content>ZigZagLeft</Content>
                                                                       </Comment>
@@ -366,10 +351,15 @@ wireID++;
                                 <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                             </ConfigurableMethodTerminal>
 
-                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                             <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
                         </ConfigurableMethodCall>
-                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                        <%if(i===0){//start%>
+
+                        <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+
+                          <%}%>
+                        <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
 
                         <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                             <Content>ZigZagRight</Content>
@@ -398,10 +388,10 @@ wireID++;
                           <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                       </ConfigurableMethodTerminal>
 
-                      <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                      <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                       <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
                   </ConfigurableMethodCall>
-                  <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                  <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
 
                   <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                       <Content>ZigZagRight</Content>
@@ -431,10 +421,10 @@ wireID++;
                                                                 <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                                                             </ConfigurableMethodTerminal>
 
-                                                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
+                                                            <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                                                             <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
                                                         </ConfigurableMethodCall>
-                                                        <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
+                                                        <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
 
                                                         <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                                                             <Content>ZigZagRight</Content>
@@ -463,23 +453,14 @@ wireID++;
                                                                             <ConfigurableMethodTerminal ConfiguredValue="0">
                                                                                 <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                                                                             </ConfigurableMethodTerminal>
-                                                                            <%if(i===codeToExecute.length-1){//end%>
+                                                                            
                                                                               <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                                                                               <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                                                                            <%}
-                                                                            else{%>
-                                                                              <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
-                                                                              <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
-                                                                              <%}%>
+
                                                                         </ConfigurableMethodCall>
-                                                                        <%if(i===codeToExecute.length-1){//end%>
-
-                                                                        <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
-
-                                                                          <%}
-                                                                            else{%>
-                                                                          <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID+1%>:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
-                                                                                <%}%>
+                                                                        <%if(i!=codeToExecute.length-1){%>
+                                                                        <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
+                                                                          <%}%>
                                                                         <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                                                                             <Content>ZigZagRight</Content>
                                                                         </Comment>
