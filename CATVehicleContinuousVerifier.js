@@ -1655,7 +1655,16 @@ define([
       .then(function (dataModel) {
           //self.logger.info(JSON.stringify(dataModel, null, 4));
           self.logger.info('generateDataModel().then(): dataModel: ' + JSON.stringify(dataModel, null, 4));
+          const superagent = require('superagent');
 
+// callback
+superagent
+  .post('http://127.0.0.1:5000')
+  .send(JSON.stringify(dataModel, null, 4)) // sends a JSON post body
+  .set('accept', 'json')
+  .end((err, res) => {
+    // Calling the end function will send the request
+  });
                   return self.modelCheck(dataModel);
               })
               .then(function () {
