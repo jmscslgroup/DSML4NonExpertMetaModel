@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><%//definition of static beginning message in all Lego files%>
 <SourceFile Version="1.0.2.10" xmlns="http://www.ni.com/SourceModel.xsd">
     <Namespace Name="Project">
         <VirtualInstrument IsTopLevel="false" IsReentrant="false" Version="1.0.2.0" OverridingModelDefinitionType="X3VIDocument" xmlns="http://www.ni.com/VirtualInstrument.xsd">
@@ -14,12 +14,14 @@
                 </StartBlock>
 
 <%
+//Template for for loop Lego codes
   addFor = function(componentID,componentX,wireID,isFinal,motionName,times,codeToExecute){
 %>
 <%var wireStart = wireID%>
 <ConfigurableWhileLoop Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" DiagramId="d0" InterruptName="01">
     <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 84 18 18" />
       <%
+      //2 cases if for block is last in path or not
       if( !isFinal) {
       %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+codeToExecute.length+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
       } else {
@@ -35,6 +37,7 @@
             </ConfigurableMethodTerminal>
             <Terminal Id="SequenceIn" Direction="Input" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 0 0" />
             <%
+            //2 more cases for if for is final block in path or not
             if( isFinal) {
             %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
             } else {
@@ -45,7 +48,7 @@
     </ConfigurableWhileLoop.BuiltInMethod>
     <ConfigurableWhileLoop.BuiltInMethod CallType="StopCondition">
         <ConfigurableMethodCall Id="n1" Bounds="<%=componentX+30%> 41 85 91" Target="StopAfterNumberIterations\.vix">
-            <ConfigurableMethodTerminal ConfiguredValue="<%=times%>">
+            <ConfigurableMethodTerminal ConfiguredValue="<%=times//amount of iterations the for loops does%>">
                 <Terminal Id="Iterations\ To\ Run" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="54 56 30 27" />
             </ConfigurableMethodTerminal>
             <ConfigurableMethodTerminal ConfiguredValue="0">
@@ -59,6 +62,7 @@
             </ConfigurableMethodTerminal>
             <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
             <%
+            //2 cases if for block is final or not
             if( !isFinal) {
             %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+codeToExecute.length+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
             } else {
@@ -70,8 +74,8 @@
     wireID++;%>
     <%let i;
 
-    for (i = 0; i < codeToExecute.length; i += 1) {
-      if(codeToExecute[i]===1){
+    for (i = 0; i < codeToExecute.length; i += 1){ //iterates through blocks in for loop
+      if(codeToExecute[i]===1){//if straight
       %>
       <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
                           <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
@@ -98,12 +102,12 @@
 
                       </ConfigurableMethodCall>
 
-                      <%if(i===0){//start%>
+                      <%if(i===0){//if starting block in for loop%>
 
                       <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
 
                         <%}%>
-                        <%if(i!=codeToExecute.length-1){%>
+                        <%if(i!=codeToExecute.length-1){//if at end block in for loop there is no joint if not there is%>
                         <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
                           <%}%>
 
@@ -112,7 +116,7 @@
                       </Comment>
       <%
     }
-      else if(codeToExecute[i]===2){
+      else if(codeToExecute[i]===2){//Left
         %>
         <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
                             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
@@ -139,12 +143,12 @@
 
                         </ConfigurableMethodCall>
 
-                        <%if(i===0){//end%>
+                        <%if(i===0){//If starting block inside for%>
 
                         <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
 
                           <%}%>
-                          <%if(i!=codeToExecute.length-1){%>
+                          <%if(i!=codeToExecute.length-1){//if not last block in for loop%>
                           <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
                             <%}%>
 
@@ -153,7 +157,7 @@
                         </Comment>
       <%
       }
-      else if (codeToExecute[i]===3){
+      else if (codeToExecute[i]===3){//Right
         %>
         <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
                             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
@@ -185,7 +189,7 @@
                         <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=wireID%>:SequenceIn)" />
 
                           <%}%>
-                          <%if(i!=codeToExecute.length-1){%>
+                          <%if(i!=codeToExecute.length-1){//if block is not last in for%>
                           <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
                             <%}%>
 
@@ -194,7 +198,7 @@
                         </Comment>
         <%
       }
-      else if (codeToExecute[i]===4){
+      else if (codeToExecute[i]===4){//ZigZagLeft
       %>
       <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
                           <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
@@ -321,7 +325,7 @@ wireID++;
                                                                             <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
 
                                                                       </ConfigurableMethodCall>
-                                                                      <%if(i!=codeToExecute.length-1){%>
+                                                                      <%if(i!=codeToExecute.length-1){//if not last block in for%>
                                                                       <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
                                                                         <%}%>
                                                                       <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
@@ -329,7 +333,7 @@ wireID++;
                                                                       </Comment>
 
       <%}
-      else if (codeToExecute[i]===5){
+      else if (codeToExecute[i]===5){//ZigZagRight
         %>
         <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
                             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
@@ -458,7 +462,7 @@ wireID++;
                                                                               <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
 
                                                                         </ConfigurableMethodCall>
-                                                                        <%if(i!=codeToExecute.length-1){%>
+                                                                        <%if(i!=codeToExecute.length-1){//if block not last block in for%>
                                                                         <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireID+1%>:SequenceIn)" />
                                                                           <%}%>
                                                                         <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
@@ -471,15 +475,15 @@ wireID++;
     	wireID++;
       }%>
 
-<%if(prevIsIf){%>
+<%if(prevIsIf){//if previous block is an if block extra joint added%>
   <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n1:SequenceIn)" />
-  
+
   <%}%>
 
 </ConfigurableWhileLoop>
-<%if(prevIsIf){%>
+<%if(prevIsIf){//Resets variable to false%>
   <%prevIsIf = false;%>
-  <%}else{%>
+  <%}else{//wire to next component%>
 <Wire Id="w<%=wireStart%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
   <%}%>
 <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
@@ -489,7 +493,7 @@ wireID++;
 }
 %>
 <%
-  addWhile = function(componentID,componentX,wireID,isFinal,motionName,condition,codeToExecute){
+  addWhile = function(componentID,componentX,wireID,isFinal,motionName,condition,codeToExecute){//TODO incomplete (probably a mix of both for and if)
 %>
 <ConfigurableWhileLoop Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" DiagramId="d0" InterruptName="01">
     <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 84 18 18" />
@@ -971,18 +975,18 @@ wireID++;
 }
 %>
 <%
-  addIf = function(componentID,componentX,wireID,isFinal,motionName,condition,codeToExecute){
+  addIf = function(componentID,componentX,wireID,isFinal,motionName,condition,codeToExecute){//Template for If block
 %>
 <%var wireStart=wireID%>
-<%if(condition===2){%>
+<%if(condition===2){//SafeStraight%>
   <PairedConfigurableMethodCall Id="n<%=componentID%>" Bounds="70 0 116 91" Target="DistanceCMCompare\.vix" PairedStructure="n0">
                     <ConfigurableMethodTerminal ConfiguredValue="1.4">
                         <Terminal Id="Port" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
                     </ConfigurableMethodTerminal>
-                    <ConfigurableMethodTerminal ConfiguredValue="2">
+                    <ConfigurableMethodTerminal ConfiguredValue="2<%//greater than%>">
                         <Terminal Id="Comparison" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="54 56 30 27" />
                     </ConfigurableMethodTerminal>
-                    <ConfigurableMethodTerminal ConfiguredValue="20">
+                    <ConfigurableMethodTerminal ConfiguredValue="20<%//distance to check%>">
                         <Terminal Id="Threshold" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
                     </ConfigurableMethodTerminal>
                     <ConfigurableMethodTerminal ConfiguredValue="0">
@@ -1000,14 +1004,14 @@ wireID++;
                 <ConfigurableFlatCaseStructure Id="n0" Bounds="186 -129 251 348" DataType="Boolean" UserSelectorBounds="0 0 0 0" Default="D5" PairedConfigurableMethodCall="n2">
                     <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="233 162 18 18" />
                     <ConfigurableFlatCaseStructure.Case Id="D5" Bounds="10 4 231 164" Pattern="True">
-                      <%if(codeToExecute[0]<4){%>
+                      <%if(codeToExecute[0]<4){//Block in if is Straight, Left, or Right%>
                         <SequenceNode Id="Output" Bounds="0 73 18 18">
                             <Terminal Id="SequenceTerminal" Direction="Output" Wire="w<%=wireID-2%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="0 0 18 18" />
                         </SequenceNode>
                         <SequenceNode Id="Input" Bounds="212 73 18 18">
                             <Terminal Id="SequenceTerminal" Direction="Input" Wire="w<%=wireID-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 0 18 18" />
                         </SequenceNode>
-                        <%}else{%>
+                        <%}else{//if block inside is ZigZagLeft or ZigZagRight%>
                         <SequenceNode Id="Output" Bounds="0 73 18 18">
                             <Terminal Id="SequenceTerminal" Direction="Output" Wire="w<%=wireID-2%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="0 0 18 18" />
                         </SequenceNode>
@@ -1016,13 +1020,13 @@ wireID++;
                         </SequenceNode>
                         <%}%>
 
-                        <%if(codeToExecute[0]<4){%>
+                        <%if(codeToExecute[0]<4){//if move is Straight, Left, or Right%>
                           <%wireID++;%>
                         <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="18 40 194 91" Target="MoveTankDistanceRotations\.vix">
                             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
                                 <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
                             </ConfigurableMethodTerminal>
-                            <%if(codeToExecute[0]===1){%>
+                            <%if(codeToExecute[0]===1){//Straight%>
                             <ConfigurableMethodTerminal ConfiguredValue="50">
                                 <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
                             </ConfigurableMethodTerminal>
@@ -1032,7 +1036,7 @@ wireID++;
                             <ConfigurableMethodTerminal ConfiguredValue="1">
                                 <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
                             </ConfigurableMethodTerminal>
-                            <%}else if(codeToExecute[0]===2){%>
+                            <%}else if(codeToExecute[0]===2){//Left%>
                               <ConfigurableMethodTerminal ConfiguredValue="25">
                                   <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
                               </ConfigurableMethodTerminal>
@@ -1042,7 +1046,7 @@ wireID++;
                               <ConfigurableMethodTerminal ConfiguredValue="2.22">
                                   <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
                               </ConfigurableMethodTerminal>
-                              <%}else if(codeToExecute[0]===3){%>
+                              <%}else if(codeToExecute[0]===3){//Right%>
                                 <ConfigurableMethodTerminal ConfiguredValue="50">
                                     <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
                                 </ConfigurableMethodTerminal>
@@ -1064,7 +1068,7 @@ wireID++;
                         </ConfigurableMethodCall>
                         <Wire Id="w<%=wireID-2%>" Joints="N(Output:SequenceTerminal) N(n<%=wireID%>:SequenceIn)" />
                         <Wire Id="w<%=wireID-1%>" Joints="N(n<%=wireID%>:SequenceOut) N(Input:SequenceTerminal)" />
-                          <%}else if(codeToExecute[0]===4){%>
+                          <%}else if(codeToExecute[0]===4){//ZigZagLeft%>
                             <%wireID++%>
                             <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="600 40 194 91" Target="MoveTankDistanceRotations\.vix">
                             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
@@ -1161,7 +1165,7 @@ wireID++;
                         </ConfigurableMethodCall>
                         <Wire Id="w<%=wireID%>" Joints="N(n<%=wireStart+1%>:SequenceOut) N(Input:SequenceTerminal)" />
                         <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireStart+1%>:SequenceIn)" />
-                            <%}else{%>
+                            <%}else{//ZigZagRight%>
                               <%wireID++%>
                             <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="600 40 194 91" Target="MoveTankDistanceRotations\.vix">
                             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
@@ -1275,15 +1279,15 @@ wireID++;
                     <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=componentID+1%>:SequenceIn)" />
                       <%prevIsIf=true;%>
                     <%}%>
-<%}else if(condition===1||condition===3){%>
+<%}else if(condition===1||condition===3){//If SafeLeft or SafeStraight%>
   <PairedConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 0 116 91" Target="DistanceCMCompare\.vix" PairedStructure="n0">
     <ConfigurableMethodTerminal ConfiguredValue="1.4">
         <Terminal Id="Port" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
     </ConfigurableMethodTerminal>
-    <ConfigurableMethodTerminal ConfiguredValue="2">
+    <ConfigurableMethodTerminal ConfiguredValue="2<%//greater%>">
         <Terminal Id="Comparison" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="54 56 30 27" />
     </ConfigurableMethodTerminal>
-    <ConfigurableMethodTerminal ConfiguredValue="20">
+    <ConfigurableMethodTerminal ConfiguredValue="20<%//distance to check%>">
         <Terminal Id="Threshold" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
     </ConfigurableMethodTerminal>
     <ConfigurableMethodTerminal ConfiguredValue="0">
@@ -1309,12 +1313,12 @@ wireID++;
             <Terminal Id="SequenceTerminal" Direction="Input" Wire="w<%=wireStart-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 0 18 18" />
         </SequenceNode>
         <%wireID++;%>
-        <%if(codeToExecute[0]===1||codeToExecute[0]===2||codeToExecute[0]===3){%>
+        <%if(codeToExecute[0]===1||codeToExecute[0]===2||codeToExecute[0]===3){//If move inside is Straight, Left, Right%>
         <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="212 40 194 91" Target="MoveTankDistanceRotations\.vix">
             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
                 <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
             </ConfigurableMethodTerminal>
-            <%if(codeToExecute[0]===1){%>
+            <%if(codeToExecute[0]===1){//Straight%>
             <ConfigurableMethodTerminal ConfiguredValue="50">
                 <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
             </ConfigurableMethodTerminal>
@@ -1324,7 +1328,7 @@ wireID++;
             <ConfigurableMethodTerminal ConfiguredValue="1">
                 <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
             </ConfigurableMethodTerminal>
-            <%}else if(codeToExecute[0]===2){%>
+            <%}else if(codeToExecute[0]===2){//Left%>
               <ConfigurableMethodTerminal ConfiguredValue="25">
                   <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
               </ConfigurableMethodTerminal>
@@ -1334,7 +1338,7 @@ wireID++;
               <ConfigurableMethodTerminal ConfiguredValue="2.22">
                   <Terminal Id="Rotations" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="116 56 30 27" />
               </ConfigurableMethodTerminal>
-              <%}else if(codeToExecute[0]===3){%>
+              <%}else if(codeToExecute[0]===3){//Right%>
                 <ConfigurableMethodTerminal ConfiguredValue="50">
                     <Terminal Id="Speed\ Left" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
                 </ConfigurableMethodTerminal>
@@ -1355,7 +1359,7 @@ wireID++;
             <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireStart-1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
         </ConfigurableMethodCall>
         <Wire Id="w<%=wireStart-2%>" Joints="N(Output:SequenceTerminal) N(n1:SequenceIn)" />
-          <%}else if(condition===4){%>
+          <%}else if(condition===4){//TODO ZigZagLeft doesn't work yet%>
             <%wireID++%>
                             <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="600 40 194 91" Target="MoveTankDistanceRotations\.vix">
                             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
@@ -1452,7 +1456,7 @@ wireID++;
                         </ConfigurableMethodCall>
                         <Wire Id="w<%=wireID%>" Joints="N(n<%=wireStart+1%>:SequenceOut) N(Input:SequenceTerminal)" />
                         <Wire Id="w<%=wireID+1%>" Joints="N(n<%=wireID%>:SequenceOut) N(n<%=wireStart+1%>:SequenceIn)" />
-            <%}else{%>
+            <%}else{//TODO ZigZagRight doesn't work yet%>
               <%wireID++%>
                             <ConfigurableMethodCall Id="n<%=wireID%>" Bounds="600 40 194 91" Target="MoveTankDistanceRotations\.vix">
                             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
@@ -1554,11 +1558,11 @@ wireID++;
             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
                 <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
             </ConfigurableMethodTerminal>
-            <%if(condition===1){%>
+            <%if(condition===1){//if sensors return true and SafeLeft pivot right to get back to straight%>
             <ConfigurableMethodTerminal ConfiguredValue="100">
                 <Terminal Id="Steering" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
             </ConfigurableMethodTerminal>
-            <%}else if(condition===3){%>
+            <%}else if(condition===3){//if sensors return true and SafeRight pivot left to get back to straight%>
               <ConfigurableMethodTerminal ConfiguredValue="-100">
                   <Terminal Id="Steering" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
               </ConfigurableMethodTerminal>
@@ -1592,11 +1596,11 @@ wireID++;
             <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
                 <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
             </ConfigurableMethodTerminal>
-            <%if(condition===1){%>
+            <%if(condition===1){//if sensors return false and SafeLeft pivot right to get back to straight%>
             <ConfigurableMethodTerminal ConfiguredValue="100">
                 <Terminal Id="Steering" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
             </ConfigurableMethodTerminal>
-            <%}else if(condition===3){%>
+            <%}else if(condition===3){//if sensors return false and SafeRight pivot left to get back to straight%>
               <ConfigurableMethodTerminal ConfiguredValue="-100">
                   <Terminal Id="Steering" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
               </ConfigurableMethodTerminal>
@@ -1625,11 +1629,11 @@ wireID++;
     <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
         <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
     </ConfigurableMethodTerminal>
-    <%if(condition===1){%>
+    <%if(condition===1){//if SafeLeft pivots to left to check sensors%>
     <ConfigurableMethodTerminal ConfiguredValue="-100">
         <Terminal Id="Steering" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
     </ConfigurableMethodTerminal>
-    <%}else if(condition===3){%>
+    <%}else if(condition===3){//if SafeRight pivots to right to check sensors%>
       <ConfigurableMethodTerminal ConfiguredValue="100">
           <Terminal Id="Steering" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="54 56 30 27" />
       </ConfigurableMethodTerminal>
@@ -1659,7 +1663,7 @@ wireID++;
 }
 %>
 <%
-    addMotion = function(componentID,componentX,legoL,legoR, legoRot, wireID, isFinal, motionName) {
+    addMotion = function(componentID,componentX,legoL,legoR, legoRot, wireID, isFinal, motionName) {//template for motion blocks
 %>                <ConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 34 194 91" Target="MoveTankDistanceRotations\.vix">
                     <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
                         <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
@@ -1681,16 +1685,16 @@ wireID++;
                     </ConfigurableMethodTerminal>
                     <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                     <%
-                    if( isFinal) {
+                    if( isFinal) {//if block is not final Matt has it backwards I think he passed in motion.Connection!=0
                     %>                    <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
                     } else {
                     %>                    <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
                     }%>
                 </ConfigurableMethodCall>
-                <%if(!prevIsIf){%>
+                <%if(!prevIsIf){//if previous blocks is not if block%>
                 <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
                   <%
-                  }else{
+                }else{//resets variable back to false since if previous block is if then there should be no joint
                     prevIsIf = false;
                     }%>
                 <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
@@ -1698,6 +1702,7 @@ wireID++;
                 </Comment>
                 <%
     }
+    //JS variable declarations
 prevIsIf = false;
 motion = {};
 componentX = 112;
@@ -1707,6 +1712,7 @@ legoL = 50;
 legoR = 50;
 legoRot = 1;
 haveMotion = false;
+//finds starting block
 for (i = 0; i < pathModel.motion.length; i += 1) {
 	if(pathModel.motion[i].isStart) {
 		motion = pathModel.motion[i];
@@ -1717,7 +1723,7 @@ for (i = 0; i < pathModel.motion.length; i += 1) {
 while(haveMotion) {
 //console.log('Have a motion: ' + JSON.stringify(motion, null, 4));
 //console.log(' - PrimitiveMotionConnections: ' + JSON.stringify(motion.PrimitiveMotionConnections, null, 4));
-
+//loops through path
 	switch(motion.Type) {
         case 1:	// Straight
             legoL = 50;
@@ -1767,13 +1773,13 @@ while(haveMotion) {
             wireID++;
             addMotion(componentID,componentX,15,15,0.3,wireID, motion.Connections.length != 0, motion.name);
             break;
-        case 6:
+        case 6://For
             addFor(componentID,componentX,wireID,motion.Connections.length==0,motion.name,motion.Times,motion.CodeToExecute);
             break;
-        case 7:
+        case 7://While
             addWhile(componentID,componentX,wireID,motion.Connections.length==0,motion.name,motion.Condition,motion.CodeToExecute);
             break;
-        case 8:
+        case 8://If
             addIf(componentID,componentX,wireID,motion.Connections.length==0,motion.name,motion.Condition,motion.CodeToExecute);
             break;
 	}
@@ -1781,7 +1787,7 @@ while(haveMotion) {
 
 
 
-
+//Gets next block until no block has no connections
 	haveMotion = false;
 	if( motion.Connections.length != 0) {
 	//	console.log('There exists an outgoing connection');
