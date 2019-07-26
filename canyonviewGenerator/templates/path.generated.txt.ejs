@@ -1,17 +1,20 @@
-<%
+<%//Define constants and variables
 	var gridDistance = 6.096*2; // 20ft * 2
 	var velocity = 1;
   var condition;
   var codeToExecute;
+	//method to template intermediate path format motion
 	addMotion = function (motion, radius, velocity, distance, angle) {
 %><%=motion%> <%=radius%> <%=velocity%> <%=distance%> <%=angle%>
 <%
 	}
+	//method to template intermediate path format control
   addControl = function(motion,times,condition,codeToExecute)
   {
 %><%=motion%> <%=times%> <%=condition%><%for (i = 0; i < codeToExecute.length; i += 1) {%> <%=codeToExecute[i]%><%}%>
 <%
   }
+	//method to template intermediate path format action = horn and signals
   addAction = function(motion)
   {
 %><%=motion%>
@@ -19,6 +22,7 @@
   }
 motion = {};
 haveMotion = false;
+//finds starting block in path
 for (i = 0; i < pathModel.motion.length; i += 1) {
 	if(pathModel.motion[i].isStart) {
 		motion = pathModel.motion[i];
@@ -48,29 +52,29 @@ switch(motion.Type) {
 		addMotion(3, gridDistance/2, velocity, 0, 90);
 		addMotion(2, gridDistance/2, velocity, 0, 90);
 	    break;
-  case 6:
+  case 6://For
     addControl(6,motion.Times,0,motion.CodeToExecute);
       break;
-  case 7:
+  case 7://While
     addControl(7,0,motion.Condition,motion.CodeToExecute);
       break;
-  case 8:
+  case 8://If
     addControl(8,0,motion.Condition,motion.CodeToExecute);
       break;
-  case 9:
+  case 9://Horn
     addAction(9);
       break;
-  case 10:
+  case 10://Left signal
     addAction(10);
       break;
-  case 11:
+  case 11://Right signal
     addAction(11);
       break;
-  case 12:
+  case 12://Hazard
     addAction(12);
       break;
 }
-
+//if has connection loads next block if not end while
 haveMotion = false;
 if( motion.Connections.length != 0) {
 //	console.log('There exists an outgoing connection');
