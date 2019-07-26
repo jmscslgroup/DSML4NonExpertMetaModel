@@ -453,7 +453,7 @@ wireID++;
                                                                             <ConfigurableMethodTerminal ConfiguredValue="0">
                                                                                 <Terminal Id="InterruptsToListenFor_16B03592_CD76_4D58_8DC3_E3C3091E327A" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="0 0 0 0" />
                                                                             </ConfigurableMethodTerminal>
-                                                                            
+
                                                                               <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                                                                               <Terminal Id="SequenceOut" Direction="Output" Wire="w<%=wireID+1%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" />
 
@@ -979,7 +979,7 @@ wireID++;
                     <ConfigurableMethodTerminal ConfiguredValue="2">
                         <Terminal Id="Comparison" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="54 56 30 27" />
                     </ConfigurableMethodTerminal>
-                    <ConfigurableMethodTerminal ConfiguredValue="10">
+                    <ConfigurableMethodTerminal ConfiguredValue="20">
                         <Terminal Id="Threshold" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
                     </ConfigurableMethodTerminal>
                     <ConfigurableMethodTerminal ConfiguredValue="0">
@@ -1268,6 +1268,10 @@ wireID++;
                     </ConfigurableFlatCaseStructure.Case>
                 </ConfigurableFlatCaseStructure>
                 <Wire Id="w<%=wireStart%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                  <%if(!isFinal){%>
+                    <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=componentID+1%>:SequenceIn)" />
+                      <%prevIsIf=true;%>
+                    <%}%>
 <%}else if(condition===1||condition===3){%>
   <PairedConfigurableMethodCall Id="n<%=componentID%>" Bounds="<%=componentX%> 0 116 91" Target="DistanceCMCompare\.vix" PairedStructure="n0">
     <ConfigurableMethodTerminal ConfiguredValue="1.4">
@@ -1276,7 +1280,7 @@ wireID++;
     <ConfigurableMethodTerminal ConfiguredValue="2">
         <Terminal Id="Comparison" Direction="Input" DataType="Int32" Hotspot="0.5 1" Bounds="54 56 30 27" />
     </ConfigurableMethodTerminal>
-    <ConfigurableMethodTerminal ConfiguredValue="10">
+    <ConfigurableMethodTerminal ConfiguredValue="20">
         <Terminal Id="Threshold" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="85 56 30 27" />
     </ConfigurableMethodTerminal>
     <ConfigurableMethodTerminal ConfiguredValue="0">
@@ -1647,6 +1651,7 @@ wireID++;
 <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
     <Content><%=motionName%></Content>
 </Comment>
+
 <%
 }
 %>
@@ -1679,12 +1684,18 @@ wireID++;
                     %>                    <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="176 33 18 18" /><%
                     }%>
                 </ConfigurableMethodCall>
+                <%if(!prevIsIf){%>
                 <Wire Id="w<%=wireID%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+                  <%
+                  }else{
+                    prevIsIf = false;
+                    }%>
                 <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
                     <Content><%=motionName%></Content>
                 </Comment>
                 <%
     }
+prevIsIf = false;
 motion = {};
 componentX = 112;
 componentID = 2;
