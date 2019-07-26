@@ -471,14 +471,17 @@ wireID++;
     	wireID++;
       }%>
 
-
-
-
-
-
+<%if(prevIsIf){%>
+  <Wire Id="w<%=wireID%>" Joints="N(n<%=wireID-1%>:SequenceOut) N(n1:SequenceIn)" />
+  
+  <%}%>
 
 </ConfigurableWhileLoop>
+<%if(prevIsIf){%>
+  <%prevIsIf = false;%>
+  <%}else{%>
 <Wire Id="w<%=wireStart%>" Joints="N(n<%=componentID-1%>:SequenceOut) N(n<%=componentID%>:SequenceIn)" />
+  <%}%>
 <Comment Bounds="<%=componentX%> -12 100 36" SizeMode="User" AttachStyle="Free">
     <Content><%=motionName%></Content>
 </Comment>
