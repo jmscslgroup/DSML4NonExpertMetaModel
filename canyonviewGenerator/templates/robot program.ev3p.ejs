@@ -1625,6 +1625,10 @@ wireID++;
     </ConfigurableFlatCaseStructure.Case>
 </ConfigurableFlatCaseStructure>
 <Wire Id="w<%=wireStart%>" Joints="N(n1:SequenceOut) N(n<%=wireStart%>:SequenceIn)" />
+  <%if(!isFinal){%>
+    <Wire Id="w<%=wireID%>" Joints="N(n0:SequenceOut) N(n<%=componentID+1%>:SequenceIn)" />
+      <%prevIsIf=true;%>
+    <%}%>
 <ConfigurableMethodCall Id="n<%=wireStart%>" Bounds="70 0 194 91" Target="MoveDistance\.vix">
     <ConfigurableMethodTerminal ConfiguredValue="1.B+C">
         <Terminal Id="Ports" Direction="Input" DataType="Single" Hotspot="0.5 1" Bounds="0 0 0 0" />
