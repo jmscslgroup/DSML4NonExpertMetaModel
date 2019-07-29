@@ -1001,7 +1001,7 @@ wireID++;
                     <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
                     <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="0 0 0 0" />
                 </PairedConfigurableMethodCall>
-                <ConfigurableFlatCaseStructure Id="n0" Bounds="186 -129 251 348" DataType="Boolean" UserSelectorBounds="0 0 0 0" Default="D5" PairedConfigurableMethodCall="n2">
+                <ConfigurableFlatCaseStructure Id="n0" Bounds="186 -129 251 348" DataType="Boolean" UserSelectorBounds="0 0 0 0" Default="D5" PairedConfigurableMethodCall="n<%=componentID%>">
                     <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="233 162 18 18" />
                     <ConfigurableFlatCaseStructure.Case Id="D5" Bounds="10 4 231 164" Pattern="True">
                       <%if(codeToExecute[0]<4){//Block in if is Straight, Left, or Right%>
@@ -1303,7 +1303,7 @@ wireID++;
     <Terminal Id="SequenceIn" Direction="Input" Wire="w<%=wireID%>" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="0 0.5" Bounds="0 33 18 18" />
     <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="0 0 0 0" />
 </PairedConfigurableMethodCall>
-<ConfigurableFlatCaseStructure Id="n0" Bounds="380 -129 445 348" DataType="Boolean" UserSelectorBounds="0 0 0 0" Default="D5" PairedConfigurableMethodCall="n2">
+<ConfigurableFlatCaseStructure Id="n0" Bounds="380 -129 445 348" DataType="Boolean" UserSelectorBounds="0 0 0 0" Default="D5" PairedConfigurableMethodCall="n<%=componentID%>">
     <Terminal Id="SequenceOut" Direction="Output" DataType="NationalInstruments:SourceModel:DataTypes:X3SequenceWireDataType" Hotspot="1 0.5" Bounds="427 162 18 18" />
     <ConfigurableFlatCaseStructure.Case Id="D5" Bounds="10 4 425 164" Pattern="True">
         <SequenceNode Id="Output" Bounds="0 73 18 18">
