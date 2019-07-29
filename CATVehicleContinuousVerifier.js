@@ -75,7 +75,7 @@ define([
         if (err) {
            // Something went wrong!
            // Handle the error and return.
-           console.log("Error with children");
+           //console.log("Error with children");
         }
         // We have an array of the children and can get information from them.
       //get non-connection nodes better for core functions to get next nodes and starting node
@@ -91,7 +91,7 @@ define([
       //get starting child
       nonConn.forEach(async (child)=>
       {
-        console.log(self.core.getAttribute(child,'name'));
+        //console.log(self.core.getAttribute(child,'name'));
 
           self.core.loadCollection(child, 'dst', function (err, connections) {
           if (err)
@@ -109,7 +109,7 @@ define([
           {
             //If current child is not the dst of any other child it is the start
               curr = child;
-              console.log('Found the starting child: ' + self.core.getAttribute(child,'name'));
+              //console.log('Found the starting child: ' + self.core.getAttribute(child,'name'));
               //TODO change to type not name push->easy read into matlab
               var name = self.core.getAttribute(child,'name');
               var type;
@@ -141,13 +141,13 @@ define([
       })
     //Fixes asynch bug where start is not recorded and saved
       await promise1;
-      console.log("Async worked? "+self.core.getAttribute(curr,'name'));
+      //console.log("Async worked? "+self.core.getAttribute(curr,'name'));
 
       //Loop through src of curr node to add next nodes there is length of nonconnection blocks-1 to loop through
       let k;
       for(k=0;k<nonConn.length-1;k++)
       {
-        console.log("Current node: "+self.core.getAttribute(curr,'name'));
+        //console.log("Current node: "+self.core.getAttribute(curr,'name'));
         //Fixes asynch bug where every iteration codetoexecute and curr not updated, loops where curr is src of connection
         await new Promise(next=>{
           self.core.loadCollection(curr, 'src', function (err, connections)
@@ -180,7 +180,7 @@ define([
       })
       }
       //Debugging statement
-    console.log("This is list after: "+controlData.CodeToExecute);
+    //console.log("This is list after: "+controlData.CodeToExecute);
     //Fixes asynch bug where list is not updated to template after path is built
     done();
   }
@@ -201,7 +201,7 @@ define([
       return function(err, dstNode) {
       if (err) {
       // Handle error
-      console.log("Error loading dest");
+      //console.log("Error loading dest");
       }
       // Here we have access to the dstNode.
       curr = dstNode;
@@ -226,8 +226,8 @@ define([
       else if (name==='Hazard')
         type = 12;
       controlData.CodeToExecute.push(type);
-      console.log(controlData.CodeToExecute);
-      console.log("Added to list: "+self.core.getAttribute(dstNode,'name'));
+      //console.log(controlData.CodeToExecute);
+      //console.log("Added to list: "+self.core.getAttribute(dstNode,'name'));
 
     }
     }
@@ -236,7 +236,7 @@ define([
               function atDestinationControl(connection) {
 
                   return function (err, dstControl) {
-                      console.log('In atDestinationControl(connection), length = ' + controlData.Connections.length);
+                      //console.log('In atDestinationControl(connection), length = ' + controlData.Connections.length);
                       if (err) {
                           error = new Error(err);
                       } else {
@@ -266,13 +266,13 @@ define([
                     }
                     //Sets attributes of each control block sets type and times
                     if (self.core.getAttribute(abstractControlBlock,'name')==='For') {
-                      console.log('FOR LOOP');
+                      //console.log('FOR LOOP');
                       controlData.Type = 6;
                       controlData.Times = self.core.getAttribute(abstractControlBlock,'times');
                   }
                   else if(self.core.getAttribute(abstractControlBlock,'name')==='While')
                   {
-                    console.log('While LOOP');
+                    //console.log('While LOOP');
                     //Sets condition number and type for while
                     var condition= self.core.getAttribute(abstractControlBlock,'condition');
                     let condNum=-1;
@@ -294,7 +294,7 @@ define([
                   //Sets type and condition number for If
                   else if(self.core.getAttribute(abstractControlBlock,'name')==='If')
                   {
-                    console.log('If');
+                    //console.log('If');
                     var condition= self.core.getAttribute(abstractControlBlock,'condition');
                     let condNum=-1;
                     if(condition==="SafeLeft")
@@ -346,7 +346,7 @@ define([
                           deferred.reject(new Error('Multiple incoming connections: ' + connections.length));
                           return;
                       } else if(connections.length == 0) {
-                          console.log('Found the starting control: ' + self.core.getPath(abstractControlBlock));
+                          //console.log('Found the starting control: ' + self.core.getPath(abstractControlBlock));
                           controlData.isStart = true;
                       }
                   });
@@ -372,7 +372,7 @@ define([
               function atDestinationAction(connection) {
 
                   return function (err, dstAction) {
-                      console.log('In atDestinationAction(connection), length = ' + actionData.Connections.length);
+                      //console.log('In atDestinationAction(connection), length = ' + actionData.Connections.length);
                       if (err) {
                           error = new Error(err);
                       } else {
@@ -402,22 +402,22 @@ define([
                                   }
                                 }
                                 if (self.core.getAttribute(abstractActionBlock,'name')==='Horn') {
-                                  console.log('Horn');
+                                  //console.log('Horn');
                                   actionData.Type = 9;
                               }
                               else if(self.core.getAttribute(abstractActionBlock,'name')==='Left_Signal')
                               {
-                                  console.log('Left Signal');
+                                  //console.log('Left Signal');
                                 actionData.Type = 10;
                               }
                               else if(self.core.getAttribute(abstractActionBlock,'name')==='Right_Signal')
                               {
-                                  console.log('Right Signal');
+                                //  console.log('Right Signal');
                                 actionData.Type = 11;
                               }
                               else if(self.core.getAttribute(abstractActionBlock,'name')==='Hazard')
                               {
-                                  console.log('Hazard');
+                                  //console.log('Hazard');
                                 actionData.Type = 12;
                               }
                               self.core.loadCollection(abstractActionBlock, 'src', function (err, connections) {
@@ -453,7 +453,7 @@ define([
                                       deferred.reject(new Error('Multiple incoming connections: ' + connections.length));
                                       return;
                                   } else if(connections.length == 0) {
-                                      console.log('Found the starting motion: ' + self.core.getPath(abstractActionBlock));
+                                    //  console.log('Found the starting motion: ' + self.core.getPath(abstractActionBlock));
                                       actionData.isStart = true;
                                   }
                               });
@@ -480,7 +480,7 @@ define([
             function atDestinationMotion(connection) {
 
                 return function (err, dstMotion) {
-                    console.log('In atDestinationMotion(connection), length = ' + motionData.Connections.length);
+                    //console.log('In atDestinationMotion(connection), length = ' + motionData.Connections.length);
                     if (err) {
                         error = new Error(err);
                     } else {
@@ -511,31 +511,31 @@ define([
             }
 
             if (self.core.getAttribute(PrimitiveMotionNode,'name')==='Straight') {
-                console.log('STRAIGHT!!!!');
+                //console.log('STRAIGHT!!!!');
                 motionData.Type = 1;
                 motionData.RadOfCurvature = 0;
                 motionData.Distance = self.core.getAttribute(PrimitiveMotionNode, 'Distance');
                 motionData.FinalTurnAngle = 0;
             } else if (self.core.getAttribute(PrimitiveMotionNode,'name')==='Left') {
-              console.log("Left");
+              //console.log("Left");
                 motionData.Type = 2;
                 motionData.RadOfCurvature = self.core.getAttribute(PrimitiveMotionNode, 'RadOfCurvature');
                 motionData.Distance = 0;
                 motionData.FinalTurnAngle = self.core.getAttribute(PrimitiveMotionNode, 'FinalTurnAngle');
             } else if (self.core.getAttribute(PrimitiveMotionNode,'name')==='Right') {
-              console.log("Right");
+              //console.log("Right");
                 motionData.Type = 3;
                 motionData.RadOfCurvature = self.core.getAttribute(PrimitiveMotionNode, 'RadOfCurvature');
                 motionData.Distance = 0;
                 motionData.FinalTurnAngle = self.core.getAttribute(PrimitiveMotionNode, 'FinalTurnAngle');
             } else if (self.core.getAttribute(PrimitiveMotionNode,'name')==='ZigZagLeft') {
-              console.log("ZigZagLeft");
+            //  console.log("ZigZagLeft");
                 motionData.Type = 4;
                 motionData.RadOfCurvature = 0;
                 motionData.Distance = 0;
                 motionData.FinalTurnAngle = 0;
             } else if (self.core.getAttribute(PrimitiveMotionNode,'name')==='ZigZagRight') {
-              console.log("ZigZagRight");
+            //  console.log("ZigZagRight");
                 motionData.Type = 5;
                 motionData.RadOfCurvature = 0;
                 motionData.Distance = 0;
@@ -579,7 +579,7 @@ define([
                     deferred.reject(new Error('Multiple incoming connections: ' + connections.length));
                     return;
                 } else if(connections.length == 0) {
-                    console.log('Found the starting motion: ' + self.core.getPath(PrimitiveMotionNode));
+                    //console.log('Found the starting motion: ' + self.core.getPath(PrimitiveMotionNode));
                     motionData.isStart = true;
                 }
             });
@@ -613,12 +613,12 @@ define([
                     }
                 };
 //Debugging statements
-            self.logger.info('In extractDataModel()');
+            //self.logger.info('In extractDataModel()');
             dataModel.pathModel.name = self.core.getAttribute(path, 'name');
-            self.logger.info('- extractDataModel() : Path name = ' + dataModel.pathModel.name);
+            //self.logger.info('- extractDataModel() : Path name = ' + dataModel.pathModel.name);
 //Load all blocks of the path
             self.core.loadChildren(path, function (err, children) {
-                console.log('self.core.loadChildren(pathNode, function (err, children) {}');
+                //console.log('self.core.loadChildren(pathNode, function (err, children) {}');
                 if (err) {
                     deferred.reject(new Error(err));
                     return;
@@ -628,16 +628,16 @@ define([
                     i,
                     metaType;
     //Loops through all of the blocks who are children of the path and calls method to build path
-    self.logger.info("Length of children of path: "+children.length);
+    //self.logger.info("Length of children of path: "+children.length);
                 for (i = 0; i < children.length; i += 1) {
                     //metaType = self.core.getAttribute(self.getMetaType(children[i]), 'name');
                     //self.logger.info(' - metaType = ' + metaType);
-                    self.logger.info("Block is "+self.core.getAttribute(children[i],'name'));
+                    //self.logger.info("Block is "+self.core.getAttribute(children[i],'name'));
                     //Metatype is not working idk y
                     //self.logger.info("Metatype of block is "+self.getMetaType(children[i],'name'));
                     var name = self.core.getAttribute(children[i],'name');
                     if (name ==='Straight'||name ==='Left'||name ==='Right'||name ==='ZigZagLeft'||name ==='ZigZagRight') {
-                        self.logger.info(' - Found primitive motion!');
+                        //self.logger.info(' - Found primitive motion!');
                         primitivePromises.push(self.getMotionData(children[i]));
                         //metaType = self.core.getAttribute(self.getMetaType(children[i]), 'name');
 
@@ -645,7 +645,7 @@ define([
                     }
                     else if(name ==='If'||name==='While'||name==='For')
                     {
-                      self.logger.info(' - Found primitive control!');
+                      //self.logger.info(' - Found primitive control!');
                       primitivePromises.push(self.getControlData(children[i]));
                       //metaType = self.core.getAttribute(self.getMetaType(children[i]), 'name');
 
@@ -653,7 +653,7 @@ define([
                     }
                     else if(name==='Horn'||name==='Right_Signal'||name==='Left_Signal'||name==='Hazard')
                     {
-                      self.logger.info(' - Found primitive action!');
+                      //self.logger.info(' - Found primitive action!');
                       primitivePromises.push(self.getActionData(children[i]));
                       //metaType = self.core.getAttribute(self.getMetaType(children[i]), 'name');
 
@@ -663,7 +663,7 @@ define([
     //Asynch fixing waiting for all blocks to execute in proper order
                 Q.all(primitivePromises)
                     .then(function (primitiveData) {
-                        self.logger.info('Q.all(primitivePromises).then(function (primitiveData){}');
+                        //self.logger.info('Q.all(primitivePromises).then(function (primitiveData){}');
                         dataModel.pathModel.motion = primitiveData;
                         deferred.resolve(dataModel);
                     })
@@ -718,7 +718,7 @@ define([
             expectedY,
             currentDirection = pathModel.startDirection;
 
-        self.logger.info('In modelCheck()');
+        //self.logger.info('In modelCheck()');
         // Convert the calues to what the class expects:
         currentX = self.letterToNumber(pathModel.startX);
         if(currentX < 0) {
@@ -1081,7 +1081,7 @@ define([
                       }
 
                       while((tempX != self.letterToNumber(pathModel.obstacleX) && tempY != (gridSize-pathModel.obstacleY))&&currentX>=0&&currentY>=0&&currentX <= gridSize-1&&currentY <= gridSize-1) {
-                      self.logger.info("While returned true");
+                      //self.logger.info("While returned true");
                       for(j = 0; j<motion.CodeToExecute.length;j+=1)
                       {
                         if(motion.CodeToExecute[j]===1)
@@ -1383,11 +1383,11 @@ define([
                         }
                       }
                       if( tempX == self.letterToNumber(pathModel.obstacleX) && tempY == (gridSize-pathModel.obstacleY)) {
-                        self.logger.info("If returned false");
+                        //self.logger.info("If returned false");
                   	}
                     else
                     {
-                      self.logger.info("If returned true");
+                      //self.logger.info("If returned true");
                       for(j = 0; j<motion.CodeToExecute.length;j+=1)
                       {
                         if(motion.CodeToExecute[j]===1)
@@ -1543,7 +1543,7 @@ define([
                     return deferred.promise;
             }
 //Logs current position on grid
-            console.log( priorPosition + ' [' + motion.Type + ']-> (' + currentX + ',' + currentY + ') : ' + currentDirection);
+            console.log( 'Previous location: '+priorPosition + ' Current action: ' + motion.name + '-> (' + currentX + ',' + currentY + ') Facing ' + currentDirection+' direction');
 //Checks if out of bounds or at obstacle
             if(currentX < 0) {
                 deferred.reject(new Error('Out of bounds on motion #' + count + ', too far West!'));
@@ -1570,7 +1570,7 @@ define([
             haveMotion = false;
             count += 1;
             if( motion.Connections.length != 0) {
-                console.log('There exists an outgoing connection');
+                //console.log('There exists an outgoing connection');
 
                 for (i = 0; i < pathModel.motion.length; i += 1) {
                     if(pathModel.motion[i].id === motion.Connections[0].targetId) {
@@ -1626,13 +1626,13 @@ define([
           deferred = new Q.defer(),
           nodeObject;
         var newName = commitObj.updater.toString();
-        this.logger.info('CATVehicleContinuousVerifier in update at commitHash', commitObj._id);
+        //this.logger.info('CATVehicleContinuousVerifier in update at commitHash', commitObj._id);
         //Root node is Guest
-        this.logger.info('Root node is '+self.core.getAttribute(rootNode,'name'));
+        //this.logger.info('Root node is '+self.core.getAttribute(rootNode,'name'));
         //Throws error
         //this.logger.info('Active node is '+self.core.getAttribute(self.activeNode,'name'));
         if (this.core.getAttribute(rootNode, 'name') !== newName) {
-            this.logger.info('CATVehicleContinuousVerifier changing name of root to committer(s): ', newName);
+            //this.logger.info('CATVehicleContinuousVerifier changing name of root to committer(s): ', newName);
             this.core.setAttribute(rootNode, 'name', newName);
             this.addCommitMessage('Changed rootNode name to "' + newName + '"');
         }
@@ -1649,12 +1649,12 @@ define([
     if(self.core.getAttribute(children[i],'name')==='aPath')
     {
       //debugging
-  self.logger.info("Child path is "+self.core.getAttribute(children[i], 'name'));
+  //self.logger.info("Child path is "+self.core.getAttribute(children[i], 'name'));
   //Ensures async not a factor
   self.extractDataModel(children[i])
       .then(function (dataModel) {
           //self.logger.info(JSON.stringify(dataModel, null, 4));
-          self.logger.info('generateDataModel().then(): dataModel: ' + JSON.stringify(dataModel, null, 4));
+          //self.logger.info('generateDataModel().then(): dataModel: ' + JSON.stringify(dataModel, null, 4));
           const superagent = require('superagent');
 
 // callback
