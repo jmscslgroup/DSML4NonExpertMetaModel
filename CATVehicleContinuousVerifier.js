@@ -1660,7 +1660,7 @@ define([
 // callback
 superagent
   .post('http://127.0.0.1:5000')
-  .send(JSON.stringify(dataModel, null, 4)) // sends a JSON post body
+  .send(dataModel) // sends a JSON post body
   .set('accept', 'json')
   .end((err, res) => {
     // Calling the end function will send the request
