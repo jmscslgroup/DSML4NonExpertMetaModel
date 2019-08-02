@@ -1780,7 +1780,7 @@ function getNextChild(connection)
 
     	}
 
-/**
+
             if(expectedX != currentX ||
                 expectedY != currentY ||
                 pathModel.endDirection !== currentDirection) {
@@ -1792,7 +1792,7 @@ function getNextChild(connection)
                 deferred.reject(new Error('The end was not reached from the start! ' + errorString));
                 return deferred.promise;
             }
-**/
+
             deferred.resolve(dataModel);
 
             return deferred.promise;
